@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Option 2: Immersive Explorer — Travel Agency Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Comic Sans MS', 'Comic Sans', cursive; background: #fff; color: #333; font-size: 14px; line-height: 1.5; }
+
+    .badge { position: absolute; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-family: Arial, sans-serif; font-weight: bold; z-index: 30; white-space: nowrap; pointer-events: none; }
+    .badge-reuse { background: #4CAF50; color: white; }
+    .badge-new   { background: #FF9800; color: white; }
+    .rel { position: relative; }
+
+    .img-ph { background: #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; border: 2px dashed #aaa; text-align: center; padding: 10px; }
+    .btn  { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #333; color: #fff; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .btn-o { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #fff; color: #333; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .inp  { border: 1px solid #555; padding: 9px 12px; font-family: inherit; background: #fff; font-size: 13px; }
+    .sec  { padding: 72px 80px; }
+    .sec-title { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 8px; }
+    .sec-sub   { font-size: 14px; color: #666; text-align: center; margin-bottom: 48px; }
+    hr { border: none; border-top: 1px solid #ccc; }
+
+    /* Top bar */
+    .topbar { background: #222; color: #fff; padding: 10px 80px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .topbar-pill { background: #fff; color: #222; padding: 3px 12px; font-size: 11px; font-weight: bold; border-radius: 2px; }
+
+    .legend { display: flex; gap: 20px; align-items: center; background: #f5f5f5; border-bottom: 1px solid #ccc; padding: 8px 80px; font-size: 11px; font-family: Arial, sans-serif; }
+    .legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; }
+
+    /* NAVBAR – transparent overlay style */
+    .navbar { display: flex; align-items: center; padding: 18px 80px; background: transparent; position: absolute; top: 0; left: 0; right: 0; z-index: 50; border-bottom: 1px dashed rgba(255,255,255,0.4); }
+    .nav-logo { font-size: 20px; font-weight: bold; color: #222; margin-right: 48px; }
+    .nav-links { display: flex; gap: 24px; flex: 1; }
+    .nav-link  { font-size: 13px; color: #333; cursor: pointer; }
+    .nav-actions { display: flex; gap: 12px; align-items: center; }
+
+    /* HERO – fullscreen */
+    .hero-wrap { position: relative; height: 680px; }
+    .hero-bg   { width: 100%; height: 100%; }
+    .hero-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.08); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+    .hero-title { font-size: 52px; font-weight: bold; color: #111; margin-bottom: 12px; line-height: 1.15; }
+    .hero-sub   { font-size: 16px; color: #444; margin-bottom: 36px; }
+
+    /* Hero Search Bar */
+    .hero-search { background: #fff; border: 2px solid #333; display: flex; align-items: stretch; max-width: 860px; width: 100%; }
+    .hs-field { display: flex; flex-direction: column; padding: 10px 16px; flex: 1; border-right: 1px solid #ccc; }
+    .hs-label { font-size: 9px; text-transform: uppercase; color: #888; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .hs-val   { font-size: 13px; color: #333; }
+    .hs-btn   { padding: 12px 28px; background: #333; color: #fff; border: none; font-family: inherit; font-size: 14px; cursor: pointer; font-weight: bold; white-space: nowrap; }
+
+    /* Popular chips */
+    .chips    { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
+    .chip     { border: 1px solid #999; padding: 4px 14px; font-size: 11px; cursor: pointer; background: rgba(255,255,255,0.7); }
+
+    /* DESTINATIONS CAROUSEL STRIP */
+    .carousel-wrap { padding: 72px 80px; }
+    .carousel-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
+    .carousel-track { display: flex; gap: 20px; overflow: hidden; }
+    .carousel-card  { border: 1px solid #ccc; flex: 0 0 260px; position: relative; }
+    .carousel-card-img  { width: 100%; height: 180px; }
+    .carousel-card-body { padding: 14px; }
+    .cc-name   { font-size: 16px; font-weight: bold; margin-bottom: 3px; }
+    .cc-meta   { font-size: 11px; color: #666; margin-bottom: 8px; }
+    .cc-price  { font-size: 14px; font-weight: bold; }
+    .carousel-arrows { display: flex; gap: 8px; margin-top: 24px; justify-content: center; }
+    .arrow-btn { width: 36px; height: 36px; border: 2px solid #333; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; }
+
+    /* SERVICES STRIP */
+    .services-strip { background: #f5f5f5; border-top: 2px solid #333; border-bottom: 2px solid #333; }
+    .services-inner { display: grid; grid-template-columns: repeat(4, 1fr); }
+    .svc-item { text-align: center; padding: 36px 20px; border-right: 1px solid #ccc; }
+    .svc-item:last-child { border-right: none; }
+    .svc-icon  { font-size: 28px; margin-bottom: 10px; }
+    .svc-title { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
+    .svc-desc  { font-size: 11px; color: #666; line-height: 1.6; }
+
+    /* FEATURED DESTINATIONS GRID */
+    .feat-dest-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; grid-template-rows: auto auto; gap: 16px; }
+    .fd-card { position: relative; overflow: hidden; }
+    .fd-card.large { grid-row: span 2; }
+    .fd-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.85); padding: 16px; border-top: 1px solid #ccc; }
+    .fd-name  { font-size: 16px; font-weight: bold; }
+    .fd-meta  { font-size: 11px; color: #666; }
+
+    /* FEATURED TESTIMONIAL */
+    .feat-testi { max-width: 820px; margin: 0 auto; text-align: center; }
+    .ft-quote  { font-size: 22px; line-height: 1.6; color: #333; font-style: italic; margin-bottom: 32px; border-left: 4px solid #333; padding-left: 24px; text-align: left; }
+    .ft-author { display: flex; align-items: center; gap: 16px; }
+    .ft-avatar { width: 56px; height: 56px; border-radius: 50%; background: #ccc; border: 2px solid #333; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; }
+    .ft-info   { text-align: left; }
+    .ft-name   { font-size: 16px; font-weight: bold; }
+    .ft-trip   { font-size: 12px; color: #666; }
+    .ft-stars  { font-size: 18px; }
+    .testi-sec-inner { display: flex; gap: 60px; align-items: flex-start; }
+    .testi-sec-left  { flex: 1; }
+    .testi-sec-right { width: 280px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+    .mini-tcard { border: 1px solid #ccc; padding: 16px; }
+    .mini-stars { font-size: 12px; margin-bottom: 6px; }
+    .mini-text  { font-size: 11px; color: #555; font-style: italic; margin-bottom: 10px; line-height: 1.6; }
+    .mini-author { display: flex; align-items: center; gap: 8px; }
+    .mini-av    { width: 30px; height: 30px; border-radius: 50%; background: #ccc; border: 1px solid #999; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; }
+    .mini-name  { font-size: 11px; font-weight: bold; }
+    .mini-trip  { font-size: 10px; color: #888; }
+
+    /* NEWSLETTER */
+    .nwsl-sec { position: relative; }
+    .nwsl-bg  { width: 100%; height: 340px; }
+    .nwsl-content { position: absolute; inset: 0; background: rgba(255,255,255,0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px; }
+    .nwsl-content h2 { font-size: 32px; font-weight: bold; margin-bottom: 10px; }
+    .nwsl-content p  { font-size: 14px; color: #555; margin-bottom: 28px; }
+    .nwsl-form { display: flex; max-width: 460px; width: 100%; }
+    .nwsl-inp  { flex: 1; border: 2px solid #333; padding: 12px 14px; background: #fff; font-family: inherit; font-size: 13px; }
+    .nwsl-btn  { border: 2px solid #333; padding: 12px 22px; background: #333; color: #fff; font-family: inherit; font-size: 13px; cursor: pointer; font-weight: bold; }
+
+    /* FOOTER */
+    .footer { background: #222; color: #fff; padding: 64px 80px 32px; }
+    .foot-top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+    .foot-logo { font-size: 19px; font-weight: bold; margin-bottom: 10px; }
+    .foot-desc { font-size: 12px; color: #aaa; line-height: 1.7; margin-bottom: 18px; }
+    .foot-social { display: flex; gap: 10px; }
+    .soc-ic { width: 30px; height: 30px; border: 1px solid #666; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #ccc; }
+    .foot-heading { font-size: 13px; font-weight: bold; margin-bottom: 14px; border-bottom: 1px solid #555; padding-bottom: 6px; color: #fff; }
+    .foot-links { display: flex; flex-direction: column; gap: 9px; }
+    .foot-link  { font-size: 12px; color: #aaa; cursor: pointer; }
+    .foot-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 11px; color: #777; }
+  </style>
+</head>
+<body>
+
+<!-- TOP LABEL BAR -->
+<div class="topbar">
+  <span>✈ Travel Agency Website &nbsp;·&nbsp; <strong>Option 2: Immersive Explorer</strong> &nbsp;·&nbsp; Fullscreen Hero · Search-First UX · Carousel</span>
+  <span class="topbar-pill">Balsamiq Wireframe · Grayscale Only</span>
+</div>
+
+<div class="legend">
+  <span><span class="legend-dot" style="background:#4CAF50;"></span><strong>[REUSE]</strong> = Existing shadcn component</span>
+  <span><span class="legend-dot" style="background:#FF9800;"></span><strong>[NEW]</strong> = Custom component to build</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ HERO (FULLSCREEN) + NAV OVERLAY -->
+<div class="hero-wrap rel">
+  <span class="badge badge-new" style="top:40px; left:12px;">[NEW] FullscreenHero</span>
+  <div class="img-ph hero-bg" style="font-size:16px;">
+    [ Fullscreen Hero Background · 1440 × 680px ]<br>
+    <span style="font-size:12px; margin-top:6px;">(Immersive landscape — Santorini cliffs / Icelandic aurora)</span>
+  </div>
+
+  <!-- NAVBAR on top of hero -->
+  <nav class="navbar rel">
+    <span class="badge badge-reuse" style="top:0; left:190px;">[REUSE] NavigationMenu</span>
+    <div class="nav-logo">✈ Explorer</div>
+    <div class="nav-links">
+      <span class="nav-link">Destinations ▾</span>
+      <span class="nav-link">Tours ▾</span>
+      <span class="nav-link">Experiences ▾</span>
+      <span class="nav-link">About</span>
+    </div>
+    <div class="nav-actions">
+      <div class="rel" style="display:inline-block;">
+        <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Button</span>
+        <button class="btn-o" style="padding:7px 16px; border-color:#555;">Sign In</button>
+      </div>
+      <button class="btn" style="padding:7px 16px;">Book Now</button>
+    </div>
+  </nav>
+
+  <!-- Hero content -->
+  <div class="hero-overlay">
+    <h1 class="hero-title">Your Next Adventure Awaits</h1>
+    <p class="hero-sub">Search from 120+ handpicked destinations across 6 continents</p>
+
+    <!-- SEARCH BAR HERO -->
+    <div class="hero-search rel">
+      <span class="badge badge-new" style="top:-10px; left:0;">[NEW] HeroSearchBar</span>
+      <div class="hs-field">
+        <div class="hs-label">🔍 Where To?</div>
+        <div class="hs-val">Search destinations, cities, landmarks...</div>
+      </div>
+      <div class="hs-field">
+        <div class="hs-label">📅 Departure</div>
+        <div class="hs-val">Select date</div>
+      </div>
+      <div class="hs-field" style="border-right:none;">
+        <div class="hs-label">👥 Travelers</div>
+        <div class="hs-val">2 Adults, 0 Children</div>
+      </div>
+      <button class="hs-btn">Search</button>
+    </div>
+
+    <!-- Popular Tag Chips -->
+    <div class="chips rel" style="margin-top:18px;">
+      <span class="badge badge-reuse" style="top:-10px; left:0;">[REUSE] Badge</span>
+      <span style="font-size:12px; color:#555; margin-right:4px;">Popular:</span>
+      <span class="chip">🌴 Bali</span>
+      <span class="chip">🗼 Paris</span>
+      <span class="chip">🌸 Tokyo</span>
+      <span class="chip">🏝 Maldives</span>
+      <span class="chip">🏛 Santorini</span>
+      <span class="chip">🦁 Safari Kenya</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ DESTINATIONS CAROUSEL -->
+<div class="carousel-wrap rel">
+  <span class="badge badge-reuse" style="top:64px; right:76px;">[REUSE] Carousel</span>
+  <div class="carousel-header">
+    <div>
+      <div class="sec-title" style="text-align:left; margin-bottom:4px;">Trending Destinations</div>
+      <div class="sec-sub" style="text-align:left; margin-bottom:0;">Scroll through our most-booked journeys this season</div>
+    </div>
+    <button class="btn-o" style="white-space:nowrap;">View All →</button>
+  </div>
+
+  <!-- Track -->
+  <div class="carousel-track rel">
+    <!-- Card -->
+    <div class="carousel-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card</span>
+      <div class="img-ph carousel-card-img">[ Santorini · 260×180px ]</div>
+      <div style="position:absolute; top:10px; left:10px; background:#333; color:#fff; padding:2px 8px; font-size:10px;">Limited</div>
+      <div class="carousel-card-body">
+        <div class="cc-name">Santorini, Greece</div>
+        <div class="cc-meta">★★★★★ &nbsp;·&nbsp; 7 Days</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+          <div class="cc-price">From $1,299</div>
+          <button class="btn-o" style="padding:5px 12px; font-size:11px;">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card</span>
+      <div class="img-ph carousel-card-img">[ Maldives · 260×180px ]</div>
+      <div style="position:absolute; top:10px; left:10px; background:#333; color:#fff; padding:2px 8px; font-size:10px;">Popular</div>
+      <div class="carousel-card-body">
+        <div class="cc-name">Maldives Islands</div>
+        <div class="cc-meta">★★★★★ &nbsp;·&nbsp; 10 Days</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+          <div class="cc-price">From $2,499</div>
+          <button class="btn-o" style="padding:5px 12px; font-size:11px;">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card</span>
+      <div class="img-ph carousel-card-img">[ Bali · 260×180px ]</div>
+      <div class="carousel-card-body">
+        <div class="cc-name">Bali, Indonesia</div>
+        <div class="cc-meta">★★★★★ &nbsp;·&nbsp; 7 Days</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+          <div class="cc-price">From $899</div>
+          <button class="btn-o" style="padding:5px 12px; font-size:11px;">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card</span>
+      <div class="img-ph carousel-card-img">[ Kyoto · 260×180px ]</div>
+      <div class="carousel-card-body">
+        <div class="cc-name">Kyoto, Japan</div>
+        <div class="cc-meta">★★★★★ &nbsp;·&nbsp; 8 Days</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+          <div class="cc-price">From $1,399</div>
+          <button class="btn-o" style="padding:5px 12px; font-size:11px;">Book</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card</span>
+      <div class="img-ph carousel-card-img">[ Morocco · 260×180px ]</div>
+      <div class="carousel-card-body">
+        <div class="cc-name">Marrakech, Morocco</div>
+        <div class="cc-meta">★★★★☆ &nbsp;·&nbsp; 6 Days</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+          <div class="cc-price">From $749</div>
+          <button class="btn-o" style="padding:5px 12px; font-size:11px;">Book</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Arrow controls -->
+  <div class="carousel-arrows rel">
+    <span class="badge badge-reuse" style="top:-10px; left:50%; transform:translateX(-50%);">[REUSE] CarouselPrevious / CarouselNext</span>
+    <button class="arrow-btn">←</button>
+    <div style="display:flex; gap:6px; align-items:center;">
+      <div style="width:8px;height:8px;border-radius:50%;background:#333;"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:#bbb;"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:#bbb;"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:#bbb;"></div>
+    </div>
+    <button class="arrow-btn">→</button>
+  </div>
+</div>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════ SERVICES STRIP -->
+<div class="services-strip rel">
+  <span class="badge badge-new" style="top:-10px; right:4px;">[NEW] ServicesStrip</span>
+  <div class="services-inner">
+    <div class="svc-item">
+      <div class="svc-icon">✈</div>
+      <div class="svc-title">Custom Tour Packages</div>
+      <p class="svc-desc">Fully bespoke itineraries built around your travel style and budget.</p>
+    </div>
+    <div class="svc-item">
+      <div class="svc-icon">🏨</div>
+      <div class="svc-title">Hotel Booking</div>
+      <p class="svc-desc">Curated hotels from boutique stays to luxury resorts worldwide.</p>
+    </div>
+    <div class="svc-item">
+      <div class="svc-icon">🚗</div>
+      <div class="svc-title">Airport Transfers</div>
+      <p class="svc-desc">Seamless door-to-door transfers with professional drivers.</p>
+    </div>
+    <div class="svc-item">
+      <div class="svc-icon">🎭</div>
+      <div class="svc-title">Local Experiences</div>
+      <p class="svc-desc">Authentic cultural immersions with expert local guides.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ FEATURED DESTINATIONS GRID -->
+<section class="sec">
+  <p class="sec-title">Explore by Continent</p>
+  <p class="sec-sub">From sun-drenched beaches to snow-capped peaks — find your perfect region</p>
+  <div class="feat-dest-grid rel">
+    <span class="badge badge-new" style="top:-10px; right:-4px;">[NEW] DestinationGrid</span>
+
+    <div class="fd-card large rel">
+      <div class="img-ph" style="height:400px;">[ Asia & Pacific · Large Feature Card · 560×400px ]</div>
+      <div class="fd-overlay">
+        <div class="fd-name">Asia &amp; Pacific</div>
+        <div class="fd-meta">42 destinations &nbsp;·&nbsp; From $699</div>
+      </div>
+    </div>
+    <div class="fd-card rel">
+      <div class="img-ph" style="height:190px;">[ Europe · 380×190px ]</div>
+      <div class="fd-overlay">
+        <div class="fd-name">Europe</div>
+        <div class="fd-meta">38 destinations &nbsp;·&nbsp; From $899</div>
+      </div>
+    </div>
+    <div class="fd-card rel">
+      <div class="img-ph" style="height:190px;">[ Americas · 380×190px ]</div>
+      <div class="fd-overlay">
+        <div class="fd-name">Americas</div>
+        <div class="fd-meta">24 destinations &nbsp;·&nbsp; From $1,099</div>
+      </div>
+    </div>
+    <div class="fd-card rel">
+      <div class="img-ph" style="height:190px;">[ Africa · 380×190px ]</div>
+      <div class="fd-overlay">
+        <div class="fd-name">Africa &amp; Safari</div>
+        <div class="fd-meta">18 destinations &nbsp;·&nbsp; From $1,499</div>
+      </div>
+    </div>
+    <div class="fd-card rel">
+      <div class="img-ph" style="height:190px;">[ Middle East · 380×190px ]</div>
+      <div class="fd-overlay">
+        <div class="fd-name">Middle East</div>
+        <div class="fd-meta">16 destinations &nbsp;·&nbsp; From $799</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════ TESTIMONIALS -->
+<section class="sec">
+  <p class="sec-title">Traveler Stories</p>
+  <p class="sec-sub">Don't just take our word for it</p>
+  <div class="testi-sec-inner">
+
+    <!-- Featured large testimonial -->
+    <div class="testi-sec-left rel">
+      <span class="badge badge-new" style="top:-10px; left:0;">[NEW] FeaturedTestimonial</span>
+      <div class="ft-stars" style="margin-bottom:16px;">★★★★★</div>
+      <blockquote class="ft-quote">
+        "This was the trip of a lifetime. Every single detail — from the airport pickup to the sunset boat tour — was flawlessly organized. ClassicHorizon didn't just plan a vacation, they created memories I'll cherish forever."
+      </blockquote>
+      <div class="ft-author" style="margin-bottom:20px;">
+        <div class="rel">
+          <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Avatar</span>
+          <div class="ft-avatar">MR</div>
+        </div>
+        <div class="ft-info">
+          <div class="ft-name">Maria Rodriguez</div>
+          <div class="ft-trip">Bali &amp; Lombok Odyssey · 14 Days · March 2026</div>
+        </div>
+      </div>
+      <button class="btn-o">Read All 1,200+ Reviews →</button>
+    </div>
+
+    <!-- 2 mini testimonials -->
+    <div class="testi-sec-right">
+      <div class="mini-tcard rel">
+        <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] MiniTestimonialCard</span>
+        <div class="mini-stars">★★★★★</div>
+        <p class="mini-text">"Incredible guides, zero stress, maximum adventure. Paris with Explorer was the best decision I've made this year."</p>
+        <div class="mini-author">
+          <div class="rel">
+            <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Avatar</span>
+            <div class="mini-av">AJ</div>
+          </div>
+          <div>
+            <div class="mini-name">Alex Johnson</div>
+            <div class="mini-trip">Paris City Break · Feb 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini-tcard rel">
+        <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] MiniTestimonialCard</span>
+        <div class="mini-stars">★★★★★</div>
+        <p class="mini-text">"The Maldives package was beyond our wildest expectations. Private villa, private beach — pure luxury at an honest price."</p>
+        <div class="mini-author">
+          <div class="rel">
+            <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Avatar</span>
+            <div class="mini-av">LK</div>
+          </div>
+          <div>
+            <div class="mini-name">Lisa &amp; Kumar Patel</div>
+            <div class="mini-trip">Maldives Honeymoon · Jan 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ NEWSLETTER w/ IMAGE BG -->
+<div class="nwsl-sec rel">
+  <span class="badge badge-new" style="top:12px; left:12px;">[NEW] NewsletterBanner</span>
+  <div class="img-ph nwsl-bg">[ Newsletter Background Image · 1440×340px ]</div>
+  <div class="nwsl-content">
+    <h2>Ready to Start Exploring?</h2>
+    <p>Join 50,000+ travelers who get exclusive deals and inspiration every week</p>
+    <div class="nwsl-form">
+      <div class="rel" style="flex:1;">
+        <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Input</span>
+        <input class="nwsl-inp" style="width:100%;" placeholder="your@email.com" />
+      </div>
+      <div class="rel">
+        <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Button</span>
+        <button class="nwsl-btn">Get Deals →</button>
+      </div>
+    </div>
+    <p style="font-size:11px; color:#888; margin-top:10px;">✓ Weekly deals &nbsp; ✓ No spam &nbsp; ✓ Cancel anytime</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ FOOTER (dark) -->
+<footer class="footer rel">
+  <span class="badge badge-new" style="top:8px; right:8px;">[NEW] Footer</span>
+  <div class="foot-top">
+    <div>
+      <div class="foot-logo">✈ Explorer</div>
+      <p class="foot-desc">Curating extraordinary journeys across the globe since 2010. Your adventure starts here.</p>
+      <div class="foot-social">
+        <div class="soc-ic">f</div>
+        <div class="soc-ic">in</div>
+        <div class="soc-ic">tw</div>
+        <div class="soc-ic">ig</div>
+        <div class="soc-ic">yt</div>
+      </div>
+    </div>
+    <div>
+      <div class="foot-heading">Explore</div>
+      <div class="foot-links">
+        <span class="foot-link">All Destinations</span>
+        <span class="foot-link">Tours by Theme</span>
+        <span class="foot-link">Luxury Travel</span>
+        <span class="foot-link">Family Trips</span>
+        <span class="foot-link">Solo Adventures</span>
+      </div>
+    </div>
+    <div>
+      <div class="foot-heading">Company</div>
+      <div class="foot-links">
+        <span class="foot-link">About Us</span>
+        <span class="foot-link">Careers</span>
+        <span class="foot-link">Blog</span>
+        <span class="foot-link">Press</span>
+        <span class="foot-link">Partners</span>
+      </div>
+    </div>
+    <div>
+      <div class="foot-heading">Help</div>
+      <div class="foot-links">
+        <span class="foot-link">FAQs</span>
+        <span class="foot-link">Contact</span>
+        <span class="foot-link">Cancellation Policy</span>
+        <span class="foot-link">Privacy</span>
+        <span class="foot-link">Terms</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    © 2026 Explorer Travel Agency · All rights reserved
+  </div>
+</footer>
+
+</body>
+</html>

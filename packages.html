@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Packages/Collections Page — Option 2 Style (Immersive Explorer)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Comic Sans MS', 'Comic Sans', cursive; background: #fff; color: #333; font-size: 14px; line-height: 1.5; }
+
+    .badge { position: absolute; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-family: Arial, sans-serif; font-weight: bold; z-index: 30; white-space: nowrap; pointer-events: none; }
+    .badge-reuse { background: #4CAF50; color: white; }
+    .badge-new   { background: #FF9800; color: white; }
+    .rel { position: relative; }
+
+    .img-ph { background: #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; border: 2px dashed #aaa; text-align: center; padding: 10px; }
+    .btn  { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #333; color: #fff; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .btn-o { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #fff; color: #333; cursor: pointer; font-family: inherit; font-size: 13px; }
+    hr { border: none; border-top: 1px solid #ccc; }
+
+    /* Top bar */
+    .topbar { background: #222; color: #fff; padding: 10px 80px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .topbar-pill { background: #fff; color: #222; padding: 3px 12px; font-size: 11px; font-weight: bold; border-radius: 2px; }
+    .legend { display: flex; gap: 20px; align-items: center; background: #f5f5f5; border-bottom: 1px solid #ccc; padding: 8px 80px; font-size: 11px; font-family: Arial, sans-serif; }
+    .legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; }
+
+    /* ── NAVBAR (same Option 2 sticky top nav) */
+    .navbar { display: flex; align-items: center; padding: 18px 80px; background: #fff; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 100; }
+    .nav-logo { font-size: 20px; font-weight: bold; margin-right: 48px; }
+    .nav-links { display: flex; gap: 24px; flex: 1; }
+    .nav-link  { font-size: 13px; cursor: pointer; border-bottom: 1px dashed #999; padding-bottom: 1px; }
+    .nav-link.active { border-bottom: 2px solid #333; font-weight: bold; }
+    .nav-actions { display: flex; gap: 12px; align-items: center; }
+
+    /* ── PAGE HEADER HERO */
+    .page-hero { position: relative; height: 420px; overflow: hidden; }
+    .page-hero-bg { width: 100%; height: 100%; }
+    .page-hero-overlay { position: absolute; inset: 0; background: rgba(255,255,255,0.12); display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; padding: 64px 80px; }
+    .breadcrumb { font-size: 11px; color: #555; margin-bottom: 14px; letter-spacing: 0.5px; }
+    .breadcrumb span { color: #999; margin: 0 6px; }
+    .page-title { font-size: 64px; font-weight: bold; color: #111; line-height: 1.05; margin-bottom: 12px; }
+    .page-sub  { font-size: 16px; color: #444; max-width: 560px; line-height: 1.6; }
+
+    /* ── CONTROLS BAR */
+    .controls-bar { display: flex; align-items: center; justify-content: space-between; padding: 24px 80px; border-bottom: 1px solid #e0e0e0; background: #fafafa; }
+    .filter-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pill { padding: 7px 20px; border-radius: 40px; border: 1px solid #bbb; background: #fff; font-family: inherit; font-size: 12px; cursor: pointer; }
+    .pill.active { background: #333; color: #fff; border-color: #333; font-weight: bold; }
+    .sort-controls { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+    .sort-label { color: #888; }
+    .sort-select { border: 1px solid #bbb; padding: 7px 14px; font-family: inherit; font-size: 12px; background: #fff; }
+    .result-count { font-size: 12px; color: #888; font-style: italic; }
+
+    /* ── VIEW TOGGLE */
+    .view-toggle { display: flex; border: 1px solid #bbb; }
+    .view-btn { padding: 6px 12px; border: none; background: #fff; font-family: inherit; font-size: 12px; cursor: pointer; }
+    .view-btn.active { background: #333; color: #fff; }
+
+    /* ── PACKAGE GRID */
+    .pkg-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; padding: 48px 80px; }
+
+    /* Standard card */
+    .pkg-card { position: relative; cursor: pointer; }
+    .pkg-card-img { width: 100%; position: relative; overflow: hidden; }
+    .pkg-card-img-inner { width: 100%; }
+    .pkg-card-badges { position: absolute; top: 16px; left: 16px; display: flex; flex-direction: column; gap: 6px; }
+    .pkg-badge { padding: 3px 10px; font-size: 10px; font-weight: bold; background: rgba(255,255,255,0.92); color: #333; }
+    .pkg-badge.discount { background: #ddd; color: #333; }
+    .pkg-card-info { padding: 18px 0 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .pkg-title { font-size: 17px; font-weight: bold; margin-bottom: 4px; }
+    .pkg-location { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.8px; }
+    .pkg-price { font-size: 22px; font-weight: bold; text-align: right; white-space: nowrap; }
+    .pkg-price-label { font-size: 9px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-top: 2px; }
+    .pkg-rating { font-size: 11px; color: #555; margin-top: 4px; }
+
+    /* ── FEATURED (wide) CARD — spans 2 cols */
+    .pkg-card-featured { grid-column: span 2; }
+    .pkg-card-featured .pkg-card-img-inner { height: 360px; }
+
+    /* ── DIVIDER SECTION: "Commission-free promise" strip */
+    .promise-strip { background: #f5f5f5; border-top: 2px solid #333; border-bottom: 2px solid #333; padding: 28px 80px; display: flex; gap: 0; }
+    .promise-item { flex: 1; text-align: center; padding: 0 20px; border-right: 1px solid #ccc; }
+    .promise-item:last-child { border-right: none; }
+    .promise-icon { font-size: 22px; margin-bottom: 6px; }
+    .promise-title { font-size: 13px; font-weight: bold; margin-bottom: 4px; }
+    .promise-desc  { font-size: 11px; color: #777; }
+
+    /* ── CATEGORY FILTER STRIP (visual) */
+    .cat-strip { padding: 48px 80px; }
+    .cat-strip-title { font-size: 22px; font-weight: bold; margin-bottom: 24px; }
+    .cat-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+    .cat-card { position: relative; overflow: hidden; cursor: pointer; }
+    .cat-card-img { width: 100%; height: 160px; }
+    .cat-card-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.88); padding: 10px 12px; font-size: 13px; font-weight: bold; text-align: center; border-top: 1px solid #ccc; }
+
+    /* ── CUSTOM QUOTE CTA */
+    .quote-cta { margin: 0 80px 64px; border: 2px dashed #999; padding: 48px 64px; display: flex; align-items: center; gap: 48px; }
+    .quote-cta-left { flex: 1; }
+    .quote-cta-title { font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+    .quote-cta-sub   { font-size: 14px; color: #666; line-height: 1.7; margin-bottom: 24px; }
+    .quote-cta-right { flex-shrink: 0; }
+
+    /* ── EMPTY STATE */
+    .empty-state { padding: 80px; text-align: center; border: 2px dashed #ccc; margin: 0 80px 48px; }
+    .empty-title { font-size: 24px; color: #aaa; font-style: italic; margin-bottom: 12px; }
+    .empty-cta   { font-size: 12px; color: #555; }
+
+    /* ── RECENTLY VIEWED strip */
+    .recently-viewed { background: #222; color: #fff; padding: 48px 80px; }
+    .rv-title { font-size: 20px; font-weight: bold; margin-bottom: 28px; color: #fff; }
+    .rv-track { display: flex; gap: 20px; }
+    .rv-card  { flex: 1; }
+    .rv-card-img { width: 100%; height: 140px; }
+    .rv-card-name  { font-size: 13px; font-weight: bold; color: #fff; margin-top: 10px; }
+    .rv-card-price { font-size: 11px; color: #aaa; margin-top: 3px; }
+
+    /* ── FOOTER (dark, same as Option 2) */
+    .footer { background: #222; color: #fff; padding: 64px 80px 32px; border-top: 1px solid #444; }
+    .foot-top { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+    .foot-logo { font-size: 19px; font-weight: bold; margin-bottom: 10px; }
+    .foot-desc { font-size: 12px; color: #aaa; line-height: 1.7; margin-bottom: 18px; }
+    .foot-social { display: flex; gap: 10px; }
+    .soc-ic { width: 30px; height: 30px; border: 1px solid #666; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #ccc; font-family: Arial, sans-serif; }
+    .foot-heading { font-size: 13px; font-weight: bold; margin-bottom: 14px; border-bottom: 1px solid #555; padding-bottom: 6px; }
+    .foot-links { display: flex; flex-direction: column; gap: 9px; }
+    .foot-link  { font-size: 12px; color: #aaa; cursor: pointer; }
+    .foot-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 11px; color: #666; }
+  </style>
+</head>
+<body>
+
+<!-- TOP LABEL BAR -->
+<div class="topbar">
+  <span>✈ Classic Horizon &nbsp;·&nbsp; <strong>Packages / Our Collections Page</strong> &nbsp;·&nbsp; Based on Option 2: Immersive Explorer</span>
+  <span class="topbar-pill">Balsamiq Wireframe · Grayscale Only</span>
+</div>
+
+<div class="legend">
+  <span><span class="legend-dot" style="background:#4CAF50;"></span><strong>[REUSE]</strong> = Existing component (codebase / shadcn)</span>
+  <span><span class="legend-dot" style="background:#FF9800;"></span><strong>[NEW]</strong> = New custom component to build</span>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ NAVBAR -->
+<nav class="navbar rel">
+  <span class="badge badge-reuse" style="top:4px; left:192px;">[REUSE] Navbar.js</span>
+  <div class="nav-logo">✈ ClassicHorizon</div>
+  <div class="nav-links">
+    <span class="nav-link">Destinations ▾</span>
+    <span class="nav-link active">Collections</span>
+    <span class="nav-link">About</span>
+    <span class="nav-link" style="border:none;">Blog</span>
+  </div>
+  <div class="nav-actions">
+    <span style="font-size:14px; cursor:pointer; margin-right:8px;">🔍</span>
+    <button class="btn-o" style="padding:8px 18px; font-size:12px;">Sign In</button>
+    <button class="btn" style="padding:8px 18px; font-size:12px;">Book Now</button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════ PAGE HERO / HEADER -->
+<div class="page-hero rel">
+  <span class="badge badge-new" style="top:12px; left:12px; z-index:40;">[NEW] PageHeroBanner</span>
+  <div class="img-ph page-hero-bg" style="font-size:15px;">
+    [ Collections Hero Background · 1440 × 420px ]<br>
+    <span style="font-size:12px; margin-top:6px;">(Collage of destination thumbnails or wide landscape · slightly blurred/dimmed)</span>
+  </div>
+  <div class="page-hero-overlay">
+    <div class="breadcrumb">Home <span>›</span> Collections</div>
+    <h1 class="page-title">Our Collections</h1>
+    <p class="page-sub">From the peaks of the Himalayas to the sunsets of Santorini, discover journeys precisely tailored to your soul.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ CONTROLS BAR (filter + sort) -->
+<div class="controls-bar rel">
+  <span class="badge badge-new" style="top:-10px; left:76px;">[NEW] PackagesFilterBar</span>
+
+  <!-- Region Filter Pills -->
+  <div class="filter-pills rel">
+    <span class="badge badge-reuse" style="top:-10px; left:0;">[REUSE] Toggle / Button variants</span>
+    <button class="pill active">All</button>
+    <button class="pill">Asia</button>
+    <button class="pill">Europe</button>
+    <button class="pill">India</button>
+    <button class="pill">Americas</button>
+    <button class="pill">Africa</button>
+    <div class="result-count" style="margin-left:16px;">Showing 4 journeys</div>
+  </div>
+
+  <!-- Sort & View -->
+  <div style="display:flex; align-items:center; gap:16px;">
+    <div class="sort-controls rel">
+      <span class="badge badge-reuse" style="top:-10px; right:-4px;">[REUSE] Select</span>
+      <span class="sort-label">Sort by:</span>
+      <select class="sort-select">
+        <option>Featured</option>
+        <option>Price: Low to High</option>
+        <option>Price: High to Low</option>
+        <option>Highest Rated</option>
+        <option>Duration</option>
+      </select>
+    </div>
+    <div class="view-toggle rel">
+      <span class="badge badge-reuse" style="top:-10px; right:-4px;">[REUSE] ToggleGroup</span>
+      <button class="view-btn active" title="Grid view">▦</button>
+      <button class="view-btn" title="List view">☰</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ PACKAGE GRID -->
+<div class="pkg-grid rel">
+  <span class="badge badge-new" style="top:-10px; right:76px;">[NEW] PackagesGrid</span>
+
+  <!-- CARD 1: Featured/Wide — Rishikesh (onDiscount) spans 2 cols -->
+  <div class="pkg-card pkg-card-featured rel">
+    <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] PackageCard (featured)</span>
+    <div class="pkg-card-img rel">
+      <div class="img-ph pkg-card-img-inner" style="height:360px;">
+        [ Spiritual Retreat in Rishikesh · Feature Card · 760×360px ]
+      </div>
+      <div class="pkg-card-badges">
+        <span class="pkg-badge">7 Days</span>
+        <span class="pkg-badge discount">⚡ Limited Offer</span>
+      </div>
+      <!-- Hover overlay indicator -->
+      <div style="position:absolute; bottom:12px; right:12px; background:rgba(255,255,255,0.85); padding:4px 10px; font-size:11px; border:1px solid #ccc;">
+        [ Hover: View Details → ]
+      </div>
+    </div>
+    <div class="pkg-card-info">
+      <div>
+        <div class="pkg-title">Spiritual Retreat in Rishikesh</div>
+        <div class="pkg-location">Rishikesh · India · Spiritual</div>
+        <div class="pkg-rating">★★★★★ 4.9</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pkg-price">$1,200</div>
+        <span class="pkg-price-label">Per Person</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: Standard — Maldives -->
+  <div class="pkg-card rel">
+    <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] PackageCard</span>
+    <div class="pkg-card-img rel">
+      <div class="img-ph pkg-card-img-inner" style="height:360px;">[ Luxury Maldives Escape · 360×360px ]</div>
+      <div class="pkg-card-badges">
+        <span class="pkg-badge">10 Days</span>
+      </div>
+    </div>
+    <div class="pkg-card-info">
+      <div>
+        <div class="pkg-title">Luxury Maldives Escape</div>
+        <div class="pkg-location">Maldives · Asia · Luxury</div>
+        <div class="pkg-rating">★★★★★ 5.0</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pkg-price">$4,500</div>
+        <span class="pkg-price-label">Per Person</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: Standard — Bali (onDiscount) -->
+  <div class="pkg-card rel">
+    <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] PackageCard</span>
+    <div class="pkg-card-img rel">
+      <div class="img-ph pkg-card-img-inner" style="height:360px; aspect-ratio:4/5;">[ Bali Tropical Paradise · 360×360px ]</div>
+      <div class="pkg-card-badges">
+        <span class="pkg-badge">8 Days</span>
+        <span class="pkg-badge discount">⚡ Limited Offer</span>
+      </div>
+    </div>
+    <div class="pkg-card-info">
+      <div>
+        <div class="pkg-title">Bali Tropical Paradise</div>
+        <div class="pkg-location">Bali · Indonesia · Honeymoon</div>
+        <div class="pkg-rating">★★★★★ 4.8</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pkg-price">$2,800</div>
+        <span class="pkg-price-label">Per Person</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 4: Standard — Santorini -->
+  <div class="pkg-card rel">
+    <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] PackageCard</span>
+    <div class="pkg-card-img rel">
+      <div class="img-ph pkg-card-img-inner" style="height:360px;">[ Santorini Sunset Odyssey · 360×360px ]</div>
+      <div class="pkg-card-badges">
+        <span class="pkg-badge">6 Days</span>
+      </div>
+    </div>
+    <div class="pkg-card-info">
+      <div>
+        <div class="pkg-title">Santorini Sunset Odyssey</div>
+        <div class="pkg-location">Santorini · Greece · Vacation</div>
+        <div class="pkg-rating">★★★★★ 4.9</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="pkg-price">$3,200</div>
+        <span class="pkg-price-label">Per Person</span>
+      </div>
+    </div>
+  </div>
+
+  <!--  [Future cards load here — Load More button below] -->
+</div>
+
+<!-- Load More -->
+<div style="text-align:center; padding:0 80px 56px;" class="rel">
+  <span class="badge badge-reuse" style="top:-10px; left:50%; transform:translateX(-50%);">[REUSE] Button</span>
+  <button class="btn-o" style="padding:12px 40px;">Load More Collections ↓</button>
+  <div style="font-size:11px; color:#aaa; margin-top:10px;">Showing 4 of 12 journeys</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ EMPTY STATE (shown when filter returns 0) -->
+<div style="display:none;"><!-- Hidden — only shown when filter returns 0 results -->
+  <div class="empty-state rel">
+    <span class="badge badge-new" style="top:-10px; right:-4px;">[NEW] EmptyState</span>
+    <div class="empty-title">No journeys found in this region yet...</div>
+    <div class="empty-cta">
+      <a style="color:#333; font-weight:bold; text-decoration:underline; font-size:13px;">Back to all collections →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ PROMISE STRIP -->
+<div class="promise-strip rel">
+  <span class="badge badge-new" style="top:-10px; right:4px;">[NEW] PromiseStrip</span>
+  <div class="promise-item">
+    <div class="promise-icon">✅</div>
+    <div class="promise-title">Best Price Guarantee</div>
+    <div class="promise-desc">Find it cheaper elsewhere? We'll match it.</div>
+  </div>
+  <div class="promise-item">
+    <div class="promise-icon">🔄</div>
+    <div class="promise-title">Free Cancellation</div>
+    <div class="promise-desc">Cancel or rebook up to 48h before departure.</div>
+  </div>
+  <div class="promise-item">
+    <div class="promise-icon">🛡</div>
+    <div class="promise-title">Fully Protected</div>
+    <div class="promise-desc">Every booking is insured and ATOL protected.</div>
+  </div>
+  <div class="promise-item">
+    <div class="promise-icon">🌍</div>
+    <div class="promise-title">Expert Curators</div>
+    <div class="promise-desc">Each journey is handcrafted by travel specialists.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ BROWSE BY CATEGORY -->
+<div class="cat-strip rel">
+  <span class="badge badge-new" style="top:40px; right:76px;">[NEW] CategoryFilterStrip</span>
+  <div class="cat-strip-title">Browse by Travel Style</div>
+  <div class="cat-cards">
+
+    <div class="cat-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] CategoryCard</span>
+      <div class="img-ph cat-card-img">[ Spiritual · 240×160px ]</div>
+      <div class="cat-card-label">🧘 Spiritual</div>
+    </div>
+
+    <div class="cat-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] CategoryCard</span>
+      <div class="img-ph cat-card-img">[ Honeymoon · 240×160px ]</div>
+      <div class="cat-card-label">💑 Honeymoon</div>
+    </div>
+
+    <div class="cat-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] CategoryCard</span>
+      <div class="img-ph cat-card-img">[ Vacation · 240×160px ]</div>
+      <div class="cat-card-label">🌴 Vacation</div>
+    </div>
+
+    <div class="cat-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] CategoryCard</span>
+      <div class="img-ph cat-card-img">[ Adventure · 240×160px ]</div>
+      <div class="cat-card-label">🏔 Adventure</div>
+    </div>
+
+    <div class="cat-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] CategoryCard</span>
+      <div class="img-ph cat-card-img">[ Luxury · 240×160px ]</div>
+      <div class="cat-card-label">💎 Luxury</div>
+    </div>
+
+  </div>
+</div>
+
+<hr />
+
+<!-- ══════════════════════════════════════════════════════════ CUSTOM QUOTE CTA -->
+<div class="quote-cta rel">
+  <span class="badge badge-new" style="top:-10px; right:-4px;">[NEW] CustomQuoteCTA</span>
+  <div class="quote-cta-left">
+    <div class="quote-cta-title">Can't find your perfect journey?</div>
+    <p class="quote-cta-sub">
+      Our travel curators can design a completely bespoke itinerary — tailored to your exact dates, budget, and travel style. No generic packages. Just your journey.
+    </p>
+    <div style="display:flex; gap:12px; align-items:center;">
+      <div class="rel" style="display:inline-block;">
+        <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Button</span>
+        <button class="btn">Request a Custom Itinerary →</button>
+      </div>
+      <span style="font-size:12px; color:#888;">or call <strong>+1 800 JOURNEY</strong></span>
+    </div>
+  </div>
+  <div class="quote-cta-right">
+    <div class="img-ph" style="width:280px; height:180px; font-size:12px;">[ Curator portrait or abstract travel illustration · 280×180px ]</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ RECENTLY VIEWED (dark strip, Option 2 style) -->
+<div class="recently-viewed rel">
+  <span class="badge badge-new" style="top:8px; right:8px;">[NEW] RecentlyViewedStrip</span>
+  <div class="rv-title">Recently Viewed</div>
+  <div class="rv-track">
+
+    <div class="rv-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] MiniPackageCard</span>
+      <div class="img-ph rv-card-img">[ Rishikesh · 300×140px ]</div>
+      <div class="rv-card-name">Spiritual Retreat in Rishikesh</div>
+      <div class="rv-card-price">$1,200 / person &nbsp;·&nbsp; 7 Days</div>
+    </div>
+
+    <div class="rv-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] MiniPackageCard</span>
+      <div class="img-ph rv-card-img">[ Maldives · 300×140px ]</div>
+      <div class="rv-card-name">Luxury Maldives Escape</div>
+      <div class="rv-card-price">$4,500 / person &nbsp;·&nbsp; 10 Days</div>
+    </div>
+
+    <div class="rv-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] MiniPackageCard</span>
+      <div class="img-ph rv-card-img">[ Santorini · 300×140px ]</div>
+      <div class="rv-card-name">Santorini Sunset Odyssey</div>
+      <div class="rv-card-price">$3,200 / person &nbsp;·&nbsp; 6 Days</div>
+    </div>
+
+    <div class="rv-card rel">
+      <span class="badge badge-new" style="top:-8px; right:-8px;">[NEW] MiniPackageCard</span>
+      <div class="img-ph rv-card-img">[ Bali · 300×140px ]</div>
+      <div class="rv-card-name">Bali Tropical Paradise</div>
+      <div class="rv-card-price">$2,800 / person &nbsp;·&nbsp; 8 Days</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ FOOTER (dark — Option 2 consistent) -->
+<footer class="footer rel">
+  <span class="badge badge-new" style="top:8px; right:8px;">[REUSE] Footer.js</span>
+  <div class="foot-top">
+    <div>
+      <div class="foot-logo">✈ ClassicHorizon</div>
+      <p class="foot-desc">Curating extraordinary journeys across the globe since 2010. Your adventure starts here.</p>
+      <div class="foot-social">
+        <div class="soc-ic">f</div>
+        <div class="soc-ic">in</div>
+        <div class="soc-ic">tw</div>
+        <div class="soc-ic">ig</div>
+        <div class="soc-ic">yt</div>
+      </div>
+    </div>
+    <div>
+      <div class="foot-heading">Collections</div>
+      <div class="foot-links">
+        <span class="foot-link">All Journeys</span>
+        <span class="foot-link">Spiritual</span>
+        <span class="foot-link">Honeymoon</span>
+        <span class="foot-link">Luxury</span>
+        <span class="foot-link">Adventure</span>
+      </div>
+    </div>
+    <div>
+      <div class="foot-heading">Company</div>
+      <div class="foot-links">
+        <span class="foot-link">About Us</span>
+        <span class="foot-link">Careers</span>
+        <span class="foot-link">Blog</span>
+        <span class="foot-link">Press</span>
+        <span class="foot-link">Partners</span>
+      </div>
+    </div>
+    <div>
+      <div class="foot-heading">Help</div>
+      <div class="foot-links">
+        <span class="foot-link">FAQs</span>
+        <span class="foot-link">Contact Us</span>
+        <span class="foot-link">Booking Policy</span>
+        <span class="foot-link">Privacy Policy</span>
+        <span class="foot-link">Terms</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    © 2026 Classic Horizon Travel · All rights reserved · Bespoke Travel Planning Since 2010
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════ ANNOTATIONS -->
+<div style="background:#fffbe6; border:2px solid #f0c040; margin:32px 80px; padding:24px 28px; font-family:Arial,sans-serif; font-size:12px; line-height:1.8; color:#555;">
+  <strong style="color:#333; font-size:13px;">📝 Page Notes (Option 2 Immersive Explorer style):</strong><br/>
+  <strong>Filter interaction:</strong> Clicking a region pill triggers GSAP Flip animation (already in codebase) — cards animate in/out smoothly.<br/>
+  <strong>PackageCard hover:</strong> Image scales up (group-hover:scale-110), overlay appears with "View Trip →" CTA — matches existing packages/page.js logic.<br/>
+  <strong>Featured card:</strong> First package or highest-rated gets 2-column featured treatment for visual hierarchy.<br/>
+  <strong>Sort dropdown:</strong> Client-side sort — no API needed, works on existing data.json.<br/>
+  <strong>View toggle:</strong> Switches between grid (current) and list view (new layout to build).<br/>
+  <strong>Load More:</strong> Pagination or infinite scroll — currently 4 packages in data.json, design for future growth.<br/>
+  <strong>Recently Viewed:</strong> Stored in localStorage — persist last 4 viewed package slugs.<br/>
+  <strong>Empty State:</strong> Matches existing empty state pattern in packages/page.js.
+</div>
+
+</body>
+</html>
