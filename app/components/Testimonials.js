@@ -1,97 +1,135 @@
 "use client";
 
-
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import data from "../data.json";
+import FeaturedTestimonial from "./testimonials/FeaturedTestimonial";
+import TestimonialGrid from "./testimonials/TestimonialGrid";
+import PaginationDots from "./testimonials/PaginationDots";
 
 export default function Testimonials() {
-    const containerRef = useRef();
+  const containerRef = useRef();
+  const [currentFeaturedIdx, setCurrentFeaturedIdx] = useState(0);
 
-    useGSAP(() => {
-        gsap.from(".testi-card", {
-            opacity: 0,
-            x: -30,
-            stagger: 0.2,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top 80%",
-            }
-        });
+  // Get featured testimonial and remaining ones
+  const featuredReview = data.reviews[currentFeaturedIdx];
+  const otherReviews = data.reviews.filter((_, idx) => idx !== currentFeaturedIdx);
 
-        gsap.from(".quote-large", {
-            opacity: 0,
-            scale: 0.9,
-            duration: 1.5,
-            ease: "expo.out",
-            scrollTrigger: {
-                trigger: containerRef.current,
-                start: "top 70%",
-            }
-        });
-    }, { scope: containerRef });
+  useGSAP(() => {
+    // Fade in section title
+    gsap.from(".testi-title", {
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 80%",
+      },
+    });
 
-    return (
-        <section ref={containerRef} className="py-24 md:py-32 bg-brand-white overflow-hidden">
-            <div className="container mx-auto px-6 md:px-12">
-                <div className="flex flex-col lg:flex-row gap-20 items-start">
+    // Featured card entrance
+    gsap.from(".featured-card-wrapper", {
+      opacity: 0,
+      x: -40,
+      duration: 1,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 75%",
+      },
+    });
 
-                    {/* Main Featured Testimonial */}
-                    <div className="flex-1">
-                        <span className="text-brand-accent text-5xl font-serif mb-8 block select-none">“</span>
-                        <blockquote className="quote-large text-3xl md:text-5xl font-heading font-medium text-brand-forest leading-tight mb-12">
-                            {data.reviews[0].text}
-                        </blockquote>
-                        <div className="flex items-center gap-6">
-                            <div className="w-16 h-16 bg-brand-forest text-brand-white flex items-center justify-center text-xl font-bold rounded-full">
-                                {data.reviews[0].initials}
-                            </div>
-                            <div>
-                                <p className="text-xl font-bold font-heading text-brand-charcoal">{data.reviews[0].author}</p>
-                                <p className="text-brand-charcoal/50 text-sm">{data.reviews[0].trip}</p>
-                            </div>
-                        </div>
-                        <div className="mt-16 flex gap-4">
-                            {[1, 2, 3, 4, 5].map(i => (
-                                <span key={i} className="text-brand-accent text-2xl">★</span>
-                            ))}
-                        </div>
-                    </div>
+    // Grid cards staggered entrance
+    gsap.from(".testimonial-grid-item", {
+      opacity: 0,
+      y: 30,
+      stagger: 0.1,
+      duration: 0.8,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: ".testimonial-grid-wrapper",
+        start: "top 80%",
+      },
+    });
 
-                    {/* Side Mini Testimonials */}
-                    <div className="w-full lg:w-96 space-y-8">
-                        <h3 className="text-sm font-bold uppercase tracking-[0.3em] text-brand-charcoal/40 mb-10">More Traveler Stories</h3>
-                        {data.reviews.slice(1).map((review) => (
-                            <div key={review.id} className="testi-card p-8 border border-brand-charcoal/5 hover:bg-brand-white hover:shadow-xl transition-all duration-500">
-                                <div className="flex gap-1 mb-4">
-                                    {[1, 2, 3, 4, 5].map(i => (
-                                        <span key={i} className="text-brand-accent text-xs">★</span>
-                                    ))}
-                                </div>
-                                <p className="text-brand-charcoal/70 text-sm italic mb-6 leading-relaxed">
-                                    "{review.text}"
-                                </p>
-                                <div className="flex items-center gap-4">
-                                    <div className="w-10 h-10 bg-brand-charcoal/5 text-brand-charcoal flex items-center justify-center text-xs font-bold rounded-full">
-                                        {review.initials}
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-brand-charcoal">{review.author}</p>
-                                        <p className="text-[10px] text-brand-charcoal/40 uppercase tracking-widest">{review.trip.split('·')[0]}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                        <button className="w-full py-4 border border-brand-charcoal/20 text-brand-charcoal text-xs font-bold uppercase tracking-widest hover:bg-brand-charcoal hover:text-brand-white transition-all">
-                            Watch Video Stories
-                        </button>
-                    </div>
+    // Pagination dots
+    gsap.from(".pagination-wrapper", {
+      opacity: 0,
+      y: 10,
+      duration: 0.6,
+      ease: "power2.out",
+      delay: 0.3,
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: "top 70%",
+      },
+    });
+  }, { scope: containerRef });
 
-                </div>
-            </div>
-        </section>
-    );
+  const handleFeaturedChange = (idx) => {
+    setCurrentFeaturedIdx(idx);
+  };
+
+  return (
+    <section
+      ref={containerRef}
+      className="py-24 md:py-32 lg:py-40 bg-brand-white overflow-hidden"
+    >
+      <div className="container mx-auto px-6 md:px-12">
+        {/* Section Header */}
+        <div className="testi-title mb-16 md:mb-24">
+          <div className="flex items-center gap-4 mb-4">
+            <span className="h-px w-8 bg-brand-charcoal/20"></span>
+            <span className="text-brand-charcoal/40 text-xs font-bold uppercase tracking-[0.3em]">
+              Traveler Stories
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-brand-forest leading-tight">
+            Voices from<br className="hidden md:block" /> Our Community
+          </h2>
+        </div>
+
+        {/* Featured + Grid Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 mb-12">
+          {/* Featured Testimonial - Larger on left */}
+          <div className="featured-card-wrapper lg:col-span-1">
+            <FeaturedTestimonial review={featuredReview} />
+          </div>
+
+          {/* Other Testimonials - Grid on right */}
+          <div className="testimonial-grid-wrapper lg:col-span-2">
+            <TestimonialGrid
+              reviews={otherReviews}
+              className="[&>div]:testimonial-grid-item"
+            />
+          </div>
+        </div>
+
+        {/* Pagination Dots */}
+        {data.reviews.length > 1 && (
+          <div className="pagination-wrapper flex justify-center md:justify-start">
+            <PaginationDots
+              total={data.reviews.length}
+              current={currentFeaturedIdx}
+              onChange={handleFeaturedChange}
+              className="mt-8"
+            />
+          </div>
+        )}
+
+        {/* Secondary CTA */}
+        <div className="mt-16 md:mt-20 text-center md:text-left">
+          <a
+            href="#"
+            className="inline-flex items-center gap-3 text-brand-accent font-bold text-sm uppercase tracking-widest hover:gap-4 transition-all duration-300"
+          >
+            Read All {data.reviews.length} Reviews
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  );
 }

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Package Details Page — Classic Horizon Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Comic Sans MS', 'Comic Sans', cursive; background: #fff; color: #333; font-size: 14px; line-height: 1.5; }
+
+    .badge { position: absolute; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-family: Arial, sans-serif; font-weight: bold; z-index: 30; white-space: nowrap; pointer-events: none; }
+    .badge-reuse { background: #4CAF50; color: white; }
+    .badge-new   { background: #FF9800; color: white; }
+    .rel { position: relative; }
+
+    .img-ph { background: #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; border: 2px dashed #aaa; text-align: center; padding: 10px; }
+    .btn  { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #333; color: #fff; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .btn-o { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #fff; color: #333; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .sec  { padding: 72px 80px; }
+    .sec-title { font-size: 28px; font-weight: bold; text-align: left; margin-bottom: 8px; }
+    .sec-sub   { font-size: 14px; color: #666; text-align: left; margin-bottom: 48px; }
+    hr { border: none; border-top: 1px solid #ccc; }
+
+    /* Top bar */
+    .topbar { background: #222; color: #fff; padding: 10px 80px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
+    .topbar-pill { background: #fff; color: #222; padding: 3px 12px; font-size: 11px; font-weight: bold; border-radius: 2px; }
+
+    .legend { display: flex; gap: 20px; align-items: center; background: #f5f5f5; border-bottom: 1px solid #ccc; padding: 8px 80px; font-size: 11px; font-family: Arial, sans-serif; }
+    .legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; }
+
+    /* HERO – fullscreen with content overlay */
+    .pdp-hero { position: relative; height: 680px; overflow: hidden; }
+    .pdp-hero-bg { width: 100%; height: 100%; }
+    .pdp-hero-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 80px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); color: #fff; }
+    .pdp-back { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; margin-bottom: 32px; }
+    .pdp-badge { display: inline-block; background: #333; color: #fff; padding: 4px 12px; font-size: 10px; font-weight: bold; margin-bottom: 16px; }
+    .pdp-title { font-size: 64px; font-weight: bold; margin-bottom: 24px; line-height: 1.1; }
+    .pdp-meta { display: flex; align-items: center; gap: 12px; font-size: 14px; }
+
+    /* Promise strip */
+    .promise-strip { background: #222; color: #fff; padding: 32px 80px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+    .promise-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .promise-item { text-align: center; }
+    .promise-label { font-size: 12px; font-weight: bold; margin-bottom: 6px; }
+    .promise-desc { font-size: 11px; color: #aaa; line-height: 1.5; }
+
+    /* Main Content Grid */
+    .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+    .content-left { }
+    .content-right { }
+
+    /* Experience Section */
+    .exp-section { margin-bottom: 64px; }
+    .exp-title { font-size: 12px; font-weight: bold; color: #999; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; }
+    .exp-quote { font-size: 24px; font-style: italic; line-height: 1.6; margin-bottom: 32px; }
+    .exp-inclusions { background: #f5f5f5; border-left: 4px solid #333; padding: 20px; margin-top: 32px; }
+    .exp-inc-title { font-size: 12px; font-weight: bold; margin-bottom: 16px; }
+    .exp-inc-list { list-style: none; }
+    .exp-inc-item { font-size: 11px; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+
+    /* Itinerary Section */
+    .itinerary-section { margin-bottom: 64px; }
+    .itinerary-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
+    .itinerary-header-left { max-width: 500px; }
+    .itinerary-desc { font-size: 11px; color: #666; line-height: 1.6; margin-top: 12px; }
+    .itinerary-toggle { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 2px solid #333; background: #fff; cursor: pointer; font-size: 11px; font-weight: bold; }
+    .itinerary-toggle.active { background: #333; color: #fff; }
+
+    /* Day Card */
+    .day-card { display: grid; grid-template-columns: 60px 1fr; gap: 20px; padding: 20px; border-bottom: 1px solid #ddd; last-child: { border-bottom: none; } transition: background 0.3s; }
+    .day-card:hover { background: #f9f9f9; }
+    .day-card.luxury { background: #f0f0f0; border-left: 4px solid #333; }
+    .day-number { font-size: 36px; font-weight: bold; color: #ddd; }
+    .day-card.luxury .day-number { color: #999; }
+    .day-content { }
+    .day-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+    .day-desc { font-size: 12px; color: #555; line-height: 1.6; }
+    .day-upgrade-badge { display: inline-block; background: #333; color: #fff; font-size: 8px; font-weight: bold; padding: 3px 8px; margin-left: 8px; }
+    .day-perks { display: flex; gap: 8px; margin-top: 12px; }
+    .perk-tag { font-size: 9px; background: #fff; border: 1px solid #999; padding: 4px 8px; border-radius: 12px; }
+
+    /* Sticky Sidebar */
+    .sidebar-card { background: #fff; border: 2px solid #ccc; padding: 32px; position: sticky; top: 100px; }
+    .sidebar-title { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; text-align: center; }
+    .sidebar-price { font-size: 48px; font-weight: bold; text-align: center; margin-bottom: 24px; }
+    .sidebar-note { font-size: 9px; color: #999; text-align: center; margin-bottom: 24px; font-style: italic; }
+
+    /* Customization Summary */
+    .custom-summary { background: #f5f5f5; border-left: 3px solid #333; padding: 16px; margin-bottom: 24px; }
+    .custom-title { font-size: 10px; font-weight: bold; margin-bottom: 12px; }
+    .custom-item { font-size: 10px; display: flex; justify-content: space-between; margin-bottom: 6px; }
+
+    /* Details Table */
+    .details-table { margin-bottom: 24px; }
+    .details-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #e0e0e0; font-size: 11px; }
+    .details-row:last-child { border-bottom: none; }
+    .details-label { color: #999; font-weight: bold; text-transform: uppercase; }
+    .details-value { font-weight: bold; }
+
+    /* CTA Buttons */
+    .cta-buttons { display: flex; flex-direction: column; gap: 8px; }
+    .cta-primary { background: #333; color: #fff; border: 2px solid #333; padding: 14px; text-align: center; font-weight: bold; cursor: pointer; }
+    .cta-secondary { background: #fff; color: #333; border: 2px solid #333; padding: 14px; text-align: center; font-weight: bold; cursor: pointer; }
+
+    /* Policy Note */
+    .policy-note { font-size: 9px; color: #999; text-align: center; border-top: 1px solid #e0e0e0; padding-top: 16px; margin-top: 16px; line-height: 1.4; }
+
+    /* Recently Viewed Section */
+    .recent-section { background: #f9f9f9; border-top: 1px solid #ccc; }
+    .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+    .recent-card { }
+    .recent-image { background: #ddd; height: 220px; margin-bottom: 16px; position: relative; }
+    .recent-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.3s; }
+    .recent-card:hover .recent-overlay { opacity: 1; }
+    .recent-category { font-size: 10px; color: #999; font-weight: bold; text-transform: uppercase; margin-bottom: 8px; }
+    .recent-title { font-size: 18px; font-weight: bold; }
+
+    /* Discovery CTA */
+    .discovery-section { background: #222; color: #fff; padding: 80px; text-align: center; }
+    .discovery-title { font-size: 48px; font-weight: bold; margin-bottom: 32px; line-height: 1.2; }
+    .discovery-ctas { display: flex; gap: 16px; justify-content: center; margin-top: 32px; }
+
+    /* Annotation boxes */
+    .annotation { background: #fffacd; border-left: 3px solid #ddd; padding: 8px 12px; margin: 16px 0; font-size: 10px; color: #555; }
+    .section-label { background: #f0f0f0; border-left: 3px solid #333; padding: 12px 16px; margin: 24px 0 16px; font-size: 12px; font-weight: bold; }
+
+  </style>
+</head>
+<body>
+
+<!-- TOP LABEL BAR -->
+<div class="topbar">
+  <span>🎫 Package Details Page Wireframe · <strong>Classic Horizon Travel</strong> · Dynamic Pricing · Itinerary Customization</span>
+  <span class="topbar-pill">Balsamiq Wireframe · Grayscale Only</span>
+</div>
+
+<div class="legend">
+  <span><span class="legend-dot" style="background:#4CAF50;"></span><strong>[REUSE]</strong> = Existing shadcn component</span>
+  <span><span class="legend-dot" style="background:#FF9800;"></span><strong>[NEW]</strong> = Custom component to build</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ HERO SECTION -->
+<section class="pdp-hero rel">
+  <span class="badge badge-new" style="top:40px; left:12px;">[NEW] PackageHero</span>
+  <div class="img-ph pdp-hero-bg" style="height:100%;">
+    [ Fullscreen Package Background Image · 1440×680px ]<br>
+    <span style="font-size:12px; margin-top:6px;">(Package-specific hero image with parallax effect)</span>
+  </div>
+
+  <div class="pdp-hero-content">
+    <span class="badge badge-reuse" style="top:0; right:12px;">[REUSE] Link</span>
+    <div class="pdp-back">← Return to Collections</div>
+    
+    <div class="pdp-badge">Spiritual • 7 Days</div>
+    <h1 class="pdp-title">Spiritual Retreat in Rishikesh</h1>
+    
+    <div class="pdp-meta">
+      <span>━</span>
+      <span>Rishikesh • India</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ PROMISE STRIP -->
+<section class="promise-strip rel">
+  <span class="badge badge-reuse" style="top:-10px; right:76px;">[REUSE] Grid Layout</span>
+  <div class="promise-grid">
+    <div class="promise-item">
+      <div class="promise-label">BESPOKE PLANNING</div>
+      <div class="promise-desc">Tailored to your rhythm</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-label">LUXURY STAYS</div>
+      <div class="promise-desc">Handpicked premium villas</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-label">LOCAL EXPERTISE</div>
+      <div class="promise-desc">Deep cultural insights</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-label">24/7 CONCIERGE</div>
+      <div class="promise-desc">Unfiltered peace of mind</div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════ MAIN CONTENT GRID -->
+<section class="sec">
+  <div class="content-grid">
+
+    <!-- LEFT COLUMN: Content -->
+    <div class="content-left">
+
+      <!-- EXPERIENCE SECTION -->
+      <div class="exp-section rel">
+        <span class="badge badge-new" style="top:-10px; left:0;">[NEW] ExperienceSection</span>
+        <h2 class="exp-title">The Experience</h2>
+        <p class="exp-quote">
+          "Experience inner peace at the yoga capital of the world. A bespoke spiritual journey along the Ganges."
+        </p>
+        
+        <div class="exp-inclusions">
+          <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card</span>
+          <h4 class="exp-inc-title">Inclusions</h4>
+          <ul class="exp-inc-list">
+            <li class="exp-inc-item"><span>✦</span> Private Transfers</li>
+            <li class="exp-inc-item"><span>✦</span> Premium Lodging</li>
+            <li class="exp-inc-item"><span>✦</span> Expert Guide</li>
+            <li class="exp-inc-item"><span>✦</span> Curated Dining</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ITINERARY SECTION -->
+      <div class="itinerary-section rel">
+        <span class="badge badge-new" style="top:-10px; left:0;">[NEW] ItineraryCustomizer</span>
+        
+        <div class="itinerary-header">
+          <div class="itinerary-header-left">
+            <h2 class="exp-title">Your Journey</h2>
+            <p class="itinerary-desc">
+              Each chapter of your journey is fully customizable. Personalize individual days to elevate your experience with luxury upgrades and bespoke arrangements.
+            </p>
+          </div>
+          <button class="itinerary-toggle" data-state="inactive">
+            <span>●</span> Personalize Journey
+          </button>
+        </div>
+
+        <div class="annotation">
+          💡 When [Personalize Journey] is clicked, toggle state becomes ACTIVE and day cards become interactive. Price updates dynamically in sidebar.
+        </div>
+
+        <!-- Day Cards -->
+        <div class="rel">
+          <span class="badge badge-reuse" style="top:-10px; right:-4px;">[REUSE] Card, Badge</span>
+          
+          <div class="day-card">
+            <div class="day-number">01</div>
+            <div class="day-content">
+              <div class="day-title">Arrival and Ganga Aarti</div>
+              <div class="day-desc">Welcome to Rishikesh. Settle into your accommodation and witness the sacred Ganga Aarti ceremony at sunset.</div>
+            </div>
+          </div>
+
+          <div class="day-card luxury">
+            <div class="day-number">02</div>
+            <div class="day-content">
+              <div class="day-title">
+                Morning Yoga and Meditation
+                <span class="day-upgrade-badge">Luxury Upgrade</span>
+              </div>
+              <div class="day-desc">Enhanced with private chauffeured transfers and a personalized champagne reception.</div>
+              <div class="day-perks">
+                <span class="perk-tag">✓ Private Guide</span>
+                <span class="perk-tag">✓ VIP Access</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">03</div>
+            <div class="day-content">
+              <div class="day-title">Temple Tour</div>
+              <div class="day-desc">Explore ancient temples and learn about spiritual traditions from expert guides.</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">04</div>
+            <div class="day-content">
+              <div class="day-title">River Rafting & Relaxation</div>
+              <div class="day-desc">Adventure on the Ganges followed by rejuvenating spa treatments.</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">05</div>
+            <div class="day-content">
+              <div class="day-title">Ashram Experience</div>
+              <div class="day-desc">Immerse yourself in ashram life with meditation and traditional teachings.</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">06</div>
+            <div class="day-content">
+              <div class="day-title">Ayurvedic Spa Day</div>
+              <div class="day-desc">Full-day wellness with traditional Ayurvedic treatments and holistic healing.</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">07</div>
+            <div class="day-content">
+              <div class="day-title">Farewell Breakfast</div>
+              <div class="day-desc">Final morning meditation and departure with newfound inner peace.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="annotation">
+          ⚙️ Clicking a day card while in customize mode toggles between "standard" and "luxury". Sidebar price recalculates (+$250 per upgrade).
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Sticky Sidebar -->
+    <div class="content-right">
+      <div class="sidebar-card rel">
+        <span class="badge badge-new" style="top:-10px; right:-10px;">[NEW] ConciergeCard</span>
+        
+        <div class="sidebar-title">Estimated Investment</div>
+        <div class="sidebar-price" id="dynamic-price">$1,200</div>
+        <div class="sidebar-note">Final estimate pending curation</div>
+
+        <!-- Customization Summary (shows when upgrades active) -->
+        <div class="custom-summary" style="display:none;" id="custom-summary">
+          <div class="custom-title">Bespoke Requests</div>
+          <div class="custom-item">
+            <span>Day 2 Upgrade</span>
+            <span>+$250</span>
+          </div>
+        </div>
+        <div class="annotation" style="margin: 12px 0; font-size: 9px;">
+          📊 This section appears when customizations are active. Shows selected upgrades and running total.
+        </div>
+
+        <!-- Details Table -->
+        <div class="details-table">
+          <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Table</span>
+          <div class="details-row">
+            <span class="details-label">Base Duration</span>
+            <span class="details-value">7 Days</span>
+          </div>
+          <div class="details-row">
+            <span class="details-label">Configuration</span>
+            <span class="details-value" id="config-value">Standard</span>
+          </div>
+          <div class="details-row">
+            <span class="details-label">Service</span>
+            <span class="details-value">Private Concierge</span>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="cta-buttons rel">
+          <span class="badge badge-reuse" style="top:-8px; left:-8px;">[REUSE] Button</span>
+          <button class="cta-primary">Begin Reservation →</button>
+          <button class="cta-secondary">Speak to an Expert</button>
+        </div>
+
+        <!-- Policy Note -->
+        <div class="policy-note">
+          Protected by our<br>Flexible Modification Policy
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════ RECENTLY VIEWED SECTION -->
+<section class="sec recent-section rel">
+  <span class="badge badge-new" style="top:64px; right:76px;">[NEW] RecentlyViewed</span>
+  <h2 class="sec-title">Your Recently Explored</h2>
+  <div class="annotation" style="margin-bottom:32px;">
+    💾 Loaded from localStorage. Shows up to 3 most recent packages (excluding current). Uses client-side state management.
+  </div>
+
+  <div class="recent-grid">
+    <div class="recent-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card, Link</span>
+      <div class="recent-image rel">
+        [ Bali Tropical Paradise · 380×220px ]
+        <div class="recent-overlay"></div>
+      </div>
+      <div class="recent-category">Honeymoon</div>
+      <h3 class="recent-title">Bali Tropical Paradise</h3>
+    </div>
+
+    <div class="recent-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card, Link</span>
+      <div class="recent-image rel">
+        [ Santorini Sunset Odyssey · 380×220px ]
+        <div class="recent-overlay"></div>
+      </div>
+      <div class="recent-category">Vacation</div>
+      <h3 class="recent-title">Santorini Sunset Odyssey</h3>
+    </div>
+
+    <div class="recent-card rel">
+      <span class="badge badge-reuse" style="top:-8px; right:-8px;">[REUSE] Card, Link</span>
+      <div class="recent-image rel">
+        [ Kyoto Zen Heritage · 380×220px ]
+        <div class="recent-overlay"></div>
+      </div>
+      <div class="recent-category">Spiritual</div>
+      <h3 class="recent-title">Kyoto Zen Heritage</h3>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<!-- ═══════════════════════════════════════════════════════ DISCOVERY CTA SECTION -->
+<section class="discovery-section rel">
+  <span class="badge badge-new" style="top:16px; right:12px;">[NEW] DiscoveryCTA</span>
+  <p style="font-size:12px; color:#aaa; margin-bottom:16px; text-transform:uppercase; letter-spacing:1px;">Endless Horizons</p>
+  <h2 class="discovery-title">Your next extraordinary<br>chapter awaits.</h2>
+  
+  <div class="discovery-ctas">
+    <button class="btn">Browse All Collections</button>
+    <button class="btn-o" style="border-color:#fff; color:#fff;">Map our Destinations</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ COMPONENT REFERENCE TABLE -->
+<div class="sec" style="background:#f9f9f9; border-top:2px solid #333;">
+  <h2 style="font-size:20px; font-weight:bold; margin-bottom:20px;">Component Architecture Reference</h2>
+  
+  <table style="width:100%; border-collapse:collapse; font-size:12px;">
+    <thead>
+      <tr style="background:#f0f0f0; border-bottom:2px solid #333;">
+        <th style="padding:12px; text-align:left; border-right:1px solid #ddd;">Component</th>
+        <th style="padding:12px; text-align:left; border-right:1px solid #ddd;">Type</th>
+        <th style="padding:12px; text-align:left; border-right:1px solid #ddd;">Primary Props/State</th>
+        <th style="padding:12px; text-align:left;">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>PackageHero</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[NEW]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">pkg (object), location (object)</td>
+        <td style="padding:12px;">Parallax effect on scroll. GSAP animation.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>ExperienceSection</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[NEW]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">pkg.description, inclusions array</td>
+        <td style="padding:12px;">Static content with sidebar callout.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>ItineraryCustomizer</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[NEW]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">pkg.itinerary, customizations (state), isCustomizing (state)</td>
+        <td style="padding:12px;">Interactive day cards. Real-time price calculation.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>ConciergeCard</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[NEW]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">pkg.price, customizations (state), upgradeCount</td>
+        <td style="padding:12px;">Sticky sidebar. Updates dynamically on upgrade selection.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>RecentlyViewed</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[NEW]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">recentlyViewed array (from localStorage)</td>
+        <td style="padding:12px;">Carousel with hover effects. Client-side only.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>DiscoveryCTA</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[NEW]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">None (static)</td>
+        <td style="padding:12px;">Bottom section with dual CTAs (Browse / Map).</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>Button</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[REUSE]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">variant, onClick</td>
+        <td style="padding:12px;">shadcn component. Primary + Secondary variants.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>Card</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[REUSE]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">children, className</td>
+        <td style="padding:12px;">shadcn component. Used for inclusions, day cards, recent items.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>Badge</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[REUSE]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">children, variant</td>
+        <td style="padding:12px;">shadcn component. Category tags, upgrade labels.</td>
+      </tr>
+      <tr style="border-bottom:1px solid #ddd;">
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>Link</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[REUSE]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">href</td>
+        <td style="padding:12px;">Next.js Link component.</td>
+      </tr>
+      <tr>
+        <td style="padding:12px; border-right:1px solid #ddd;"><strong>Table</strong></td>
+        <td style="padding:12px; border-right:1px solid #ddd;">[REUSE]</td>
+        <td style="padding:12px; border-right:1px solid #ddd;">children</td>
+        <td style="padding:12px;">shadcn component. Details table in sidebar.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ STATE MANAGEMENT & DATA FLOW -->
+<div class="sec" style="background:#f0f0f0; border-top:2px solid #333;">
+  <h2 style="font-size:20px; font-weight:bold; margin-bottom:20px;">State Management & Data Flow</h2>
+
+  <div class="section-label">React State (Client Component)</div>
+  <div class="annotation">
+    <strong>useState hooks:</strong><br>
+    • customizations: { dayIndex: 'luxury' | 'standard' }<br>
+    • isCustomizing: boolean (toggle mode)<br>
+    • recentlyViewed: array (from localStorage)<br>
+    <br>
+    <strong>Derived values:</strong><br>
+    • hasUpgrades: boolean (any customizations selected)<br>
+    • upgradeCount: number (luxury day count)<br>
+    • dynamicPrice: $basePrice + (upgradeCount × $250)
+  </div>
+
+  <div class="section-label">Effects & Animations (GSAP)</div>
+  <div class="annotation">
+    <strong>useGSAP hook manages:</strong><br>
+    • Hero image parallax scrolling<br>
+    • Staggered reveal animations on page load<br>
+    • Section header fade-ins on scroll<br>
+    • Individual itinerary card reveals<br>
+    • ScrollTrigger refresh on customization state change<br>
+    <br>
+    <strong>Event handlers:</strong><br>
+    • toggleCustomization(idx, type): Updates customizations state<br>
+    • setIsCustomizing(boolean): Toggles edit mode
+  </div>
+
+  <div class="section-label">Data Source</div>
+  <div class="annotation">
+    <strong>From data.json (server):</strong><br>
+    • Package details (pkg object): id, slug, title, category, location, price, duration, image, description, itinerary<br>
+    • Location details: name, country<br>
+    <br>
+    <strong>From localStorage (client):</strong><br>
+    • recentlyViewed: array of package slugs (max 5)<br>
+    • Updated on component mount
+  </div>
+
+  <div class="section-label">Price Calculation Logic</div>
+  <div class="annotation">
+    base_price = $1,200 (from pkg.price)<br>
+    upgrade_count = Object.values(customizations).filter(v => v === 'luxury').length<br>
+    <strong>final_price = base_price + (upgrade_count × $250)</strong><br>
+    <br>
+    Example: 2 luxury upgrades → $1,200 + (2 × $250) = $1,700
+  </div>
+
+  <div class="section-label">Responsive Layout</div>
+  <div class="annotation">
+    • Mobile (<768px): Single column layout. Sidebar below content. Sticky disabled.<br>
+    • Tablet/Desktop (≥768px): Two-column grid (8 cols / 4 cols). Sidebar sticky at top-32.<br>
+    • Hero height: 85vh (scales responsively)<br>
+    • Promise strip: 4-col grid → 2-col on tablet → 1-col on mobile
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ INTERACTIVITY FLOWS -->
+<div class="sec" style="background:#fffacd;">
+  <h2 style="font-size:20px; font-weight:bold; margin-bottom:20px; color:#333;">User Interaction Flows</h2>
+
+  <div class="section-label">Flow 1: Browse Package Details</div>
+  <div class="annotation">
+    1. User arrives at /packages/[slug] page<br>
+    2. Hero parallax animates on scroll<br>
+    3. Sections fade in with GSAP reveals<br>
+    4. Itinerary cards load with individual scroll triggers<br>
+    5. Sidebar remains sticky during scroll<br>
+    <br>
+    <strong>Outcome:</strong> Immersive, animated package discovery experience.
+  </div>
+
+  <div class="section-label">Flow 2: Customize Itinerary</div>
+  <div class="annotation">
+    1. User clicks [Personalize Journey] button<br>
+    2. isCustomizing state → true (button highlight, status change to "Confirm Personalization")<br>
+    3. Day cards become clickable (hover states, cursor:pointer)<br>
+    4. User clicks day cards to toggle between "standard" & "luxury"<br>
+    5. Clicked card updates: background color, shows upgrade badge, displays perks<br>
+    6. Sidebar updates:<br>
+       • dynamicPrice recalculates in real-time<br>
+       • Custom Summary section appears (shows each upgraded day + cost)<br>
+       • Configuration field changes from "Standard" → "Bespoke"<br>
+    7. CTA button text changes: "Begin Reservation" → "Request Bespoke Quote"<br>
+    <br>
+    <strong>Outcome:</strong> User creates personalized itinerary with real-time pricing feedback.
+  </div>
+
+  <div class="section-label">Flow 3: Proceed to Booking</div>
+  <div class="annotation">
+    1. User review final price & customizations<br>
+    2. Clicks primary CTA ("Begin Reservation" or "Request Bespoke Quote")<br>
+    3. Navigate to /booking with package slug + customizations in URL params (optional)<br>
+    4. Alternatively, user clicks "Speak to an Expert" → Initiates phone call or chat<br>
+    <br>
+    <strong>Outcome:</strong> Lead capture and booking initiation.
+  </div>
+
+  <div class="section-label">Flow 4: Recently Viewed Tracking</div>
+  <div class="annotation">
+    1. User lands on package detail page<br>
+    2. useEffect hook on mount: reads localStorage["recentlyViewed"]<br>
+    3. Filters to exclude current package slug<br>
+    4. Renders up to 3 recent packages in grid<br>
+    5. Updates localStorage with new visit (max 5 total)<br>
+    6. User clicks recent card → navigates to that package<br>
+    <br>
+    <strong>Outcome:</strong> Personalized "continue exploring" experience across sessions.
+  </div>
+</div>
+
+<div style="padding:72px 80px; background:#222; color:#fff; text-align:center; margin-top:32px;">
+  <p style="font-size:13px; line-height:1.8; margin-bottom:16px;">
+    <strong>Total New Components: 6</strong> (PackageHero, ExperienceSection, ItineraryCustomizer, ConciergeCard, RecentlyViewed, DiscoveryCTA)<br>
+    <strong>Shadcn [REUSE]: 6</strong> (Button, Card, Badge, Link, Table, Grid/Flex layouts)
+  </p>
+  <p style="font-size:11px; color:#aaa;">
+    Wireframe prepared for development. All data flows, state management, and GSAP animations documented.
+  </p>
+</div>
+
+</body>
+</html>

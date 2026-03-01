@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import About from "./components/About";
 import Categories from "./components/Categories";
 import FeaturedPackages from "./components/FeaturedPackages";
+import HowItWorks from "./components/HowItWorks";
 import Testimonials from "./components/Testimonials";
 import Link from "next/link";
 
@@ -14,6 +15,7 @@ export default function Home() {
       <About />
       <Categories />
       <FeaturedPackages />
+      <HowItWorks />
 
       {/* Visual Break / Story Section */}
       <section className="relative py-32 bg-brand-forest text-brand-white overflow-hidden">
@@ -34,10 +36,10 @@ export default function Home() {
             </div>
           </div>
           <div className="hidden lg:grid grid-cols-2 gap-6">
-            <div className="aspect-[3/4] overflow-hidden translate-y-12">
+            <div className="aspect-3/4 overflow-hidden translate-y-12">
               <img src="https://images.unsplash.com/photo-1512100356956-c1227c331f01?q=80&w=800" alt="Travel" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
             </div>
-            <div className="aspect-[3/4] overflow-hidden -translate-y-12">
+            <div className="aspect-3/4 overflow-hidden -translate-y-12">
               <img src="https://images.unsplash.com/photo-1540202404-a2f29036bb52?q=80&w=800" alt="Travel" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
             </div>
           </div>

@@ -2,6 +2,7 @@ import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import PageTransition from "./components/PageTransition";
 
 const outfit = Outfit({
   variable: "--font-heading",
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${outfit.variable} ${inter.variable} antialiased`}>
         <Navbar />
-        <main>{children}</main>
+        <PageTransition>
+          {children}
+        </PageTransition>
         <Footer />
       </body>
     </html>

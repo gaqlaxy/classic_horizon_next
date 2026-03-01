@@ -1,28 +1,37 @@
 "use client";
 
-
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-export default function BookingPage() {
+function BookingForm() {
+    const searchParams = useSearchParams();
+    const pkgName = searchParams.get("package");
+
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
-        destination: "",
+        destination: pkgName || "",
         travelDate: "",
         guests: "2 Adults",
         message: ""
     });
+
+    useEffect(() => {
+        if (pkgName) {
+            setFormData(prev => ({ ...prev, destination: pkgName }));
+        }
+    }, [pkgName]);
+
     const [isSuccess, setIsSuccess] = useState(false);
     const containerRef = useRef();
     const checkmarkRef = useRef();
 
     useGSAP(() => {
-        // Entrance animation for the form container
         gsap.from(".form-step", {
             x: step > 1 ? 50 : 0,
             opacity: 0,
@@ -90,8 +99,6 @@ export default function BookingPage() {
     return (
         <div ref={containerRef} className="pt-40 pb-24 bg-brand-white min-h-screen">
             <div className="container mx-auto px-6 max-w-3xl">
-
-                {/* Progress Indicator */}
                 <div className="flex items-center justify-between mb-20 relative">
                     <div className="absolute top-1/2 left-0 w-full h-[1px] bg-brand-charcoal/5 -z-10"></div>
                     {[1, 2, 3].map((s) => (
@@ -171,7 +178,6 @@ export default function BookingPage() {
                                     )}
                                 </p>
                             </div>
-
                         </div>
                     )}
 
@@ -192,5 +198,17 @@ export default function BookingPage() {
                 </p>
             </div>
         </div>
+    );
+}
+
+export default function BookingPage() {
+    return (
+        <Suspense fallback={
+            <div className="pt-40 pb-24 min-h-screen flex items-center justify-center font-heading text-brand-forest uppercase tracking-widest text-xs">
+                Loading Form...
+            </div>
+        }>
+            <BookingForm />
+        </Suspense>
     );
 }

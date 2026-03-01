@@ -5,6 +5,8 @@ import gsap from "gsap";
 import { useRef } from "react";
 import Link from "next/link";
 
+import HowItWorks from "../components/HowItWorks";
+
 export default function AboutPage() {
     const containerRef = useRef();
 
@@ -138,6 +140,8 @@ export default function AboutPage() {
                         </div>
                     </div>
                 </section>
+
+                <HowItWorks />
 
                 {/* Final CTA */}
                 <section className="about-section py-40 text-center">

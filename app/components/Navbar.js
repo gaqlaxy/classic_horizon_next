@@ -71,11 +71,11 @@ export default function Navbar() {
 
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="relative z-110 flex flex-col gap-1.5 cursor-pointer"
+                        className="relative z-110 flex flex-col gap-1.5 cursor-pointer md:hidden"
                     >
-                        <span className={`w-8 h-0.5 bg-brand-forest transition-all ${isMenuOpen ? "rotate-45 translate-y-2" : ""}`}></span>
-                        <span className={`w-8 h-0.5 bg-brand-forest transition-all ${isMenuOpen ? "opacity-0" : ""}`}></span>
-                        <span className={`w-8 h-0.5 bg-brand-forest transition-all ${isMenuOpen ? "-rotate-45 -translate-y-2" : ""}`}></span>
+                        <span className={`w-8 h-0.5 transition-all ${isMenuOpen ? "bg-brand-white rotate-45 translate-y-2" : "bg-brand-forest"}`}></span>
+                        <span className={`w-8 h-0.5 transition-all ${isMenuOpen ? "bg-brand-white opacity-0" : "bg-brand-forest"}`}></span>
+                        <span className={`w-8 h-0.5 transition-all ${isMenuOpen ? "bg-brand-white -rotate-45 -translate-y-2" : "bg-brand-forest"}`}></span>
                     </button>
                 </div>
             </div>
