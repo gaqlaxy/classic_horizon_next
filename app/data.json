@@ -154,6 +154,89 @@
                 "Day 5: Black Sand Beaches",
                 "Day 6: Departure"
             ]
+        },
+        {
+            "id": "5",
+            "slug": "kyoto-zen-heritage",
+            "title": "Kyoto Zen Heritage",
+            "category": "spiritual",
+            "location": "kyoto",
+            "price": 3500,
+            "duration": "6 Days",
+            "rating": 4.9,
+            "onDiscount": false,
+            "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200",
+            "description": "Discover the ancient temples and serene gardens of Japan's cultural heart. A journey through time and tradition.",
+            "itinerary": [
+                "Day 1: Arrival & Gion Walk",
+                "Day 2: Kinkaku-ji & Arashiyama",
+                "Day 3: Tea Ceremony & Calligraphy",
+                "Day 4: Nara Day Trip",
+                "Day 5: Fushimi Inari & Sake Tasting",
+                "Day 6: Departure"
+            ]
+        },
+        {
+            "id": "6",
+            "slug": "paris-gourmet-art",
+            "title": "Parisian Gourmet & Art",
+            "category": "luxury",
+            "location": "paris",
+            "price": 5200,
+            "duration": "5 Days",
+            "rating": 5.0,
+            "onDiscount": true,
+            "image": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200",
+            "description": "An ultra-luxury immersion into the finest gastronomy and world-class art of the City of Light.",
+            "itinerary": [
+                "Day 1: Private Louvre Tour",
+                "Day 2: Michelin Star Dining Experience",
+                "Day 3: Montmartre Artist Walk",
+                "Day 4: Seine Dinner Cruise",
+                "Day 5: Palace of Versailles"
+            ]
+        },
+        {
+            "id": "7",
+            "slug": "kerala-serene-backwaters",
+            "title": "Kerala Serene Backwaters",
+            "category": "vacation",
+            "location": "kerala",
+            "price": 1800,
+            "duration": "7 Days",
+            "rating": 4.8,
+            "onDiscount": false,
+            "image": "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?q=80&w=1200",
+            "description": "Sail through the tranquil backwaters of Alleppey on a private houseboat and rejuvenate with authentic Ayurveda.",
+            "itinerary": [
+                "Day 1: Kochi Arrival",
+                "Day 2: Munnar Tea Gardens",
+                "Day 3: Wildlife Sanctuary",
+                "Day 4: Alleppey Houseboat",
+                "Day 5: Backwater Cruising",
+                "Day 6: Varkala Beach",
+                "Day 7: Departure"
+            ]
+        },
+        {
+            "id": "8",
+            "slug": "bali-surf-soul",
+            "title": "Ultimate Surf & Soul",
+            "category": "adventure",
+            "location": "bali",
+            "price": 2100,
+            "duration": "9 Days",
+            "rating": 4.7,
+            "onDiscount": true,
+            "image": "https://images.unsplash.com/photo-1537944434965-cf4679d1a598?q=80&w=1200",
+            "description": "Combine world-class surfing in Uluwatu with spiritual healing in the heart of Ubud.",
+            "itinerary": [
+                "Day 1-3: Surf Camp Uluwatu",
+                "Day 4-6: Ubud Yoga & Meditation",
+                "Day 7: Waterfall Treking",
+                "Day 8: Mount Batur Sunrise",
+                "Day 9: Departure"
+            ]
         }
     ],
     "reviews": [

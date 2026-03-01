@@ -82,7 +82,7 @@ export default function DestinationsPage() {
                                                     </p>
                                                 </div>
                                                 <Link
-                                                    href={`/packages?location=${loc.id}`}
+                                                    href={`/destinations/${loc.id}`}
                                                     className="text-xs font-bold uppercase tracking-widest text-brand-forest border-b-2 border-brand-accent pb-1 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0"
                                                 >
                                                     Explore
