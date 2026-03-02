@@ -10,19 +10,22 @@ export default function TestimonialsCarousel({ reviews }) {
   const slideRef = useRef();
 
   // GSAP animation for entry
-  useGSAP(() => {
-    gsap.from(".carousel-card", {
-      opacity: 0,
-      y: 30,
-      stagger: 0.2,
-      duration: 0.8,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 80%",
-      },
-    });
-  }, { scope: containerRef });
+  useGSAP(
+    () => {
+      gsap.from(".carousel-card", {
+        opacity: 0,
+        y: 30,
+        stagger: 0.2,
+        duration: 0.8,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+        },
+      });
+    },
+    { scope: containerRef },
+  );
 
   const scrollBy = (dir) => {
     if (!slideRef.current) return;
@@ -46,7 +49,7 @@ export default function TestimonialsCarousel({ reviews }) {
         {reviews.map((review) => (
           <div
             key={review.id}
-            className="carousel-card flex-shrink-0 w-full md:w-80"
+            className="carousel-card shrink-0 w-full md:w-80"
             style={{ scrollSnapAlign: "start" }}
           >
             <TestimonialCard review={review} featured={false} />
@@ -59,16 +62,12 @@ export default function TestimonialsCarousel({ reviews }) {
         onClick={() => scrollBy(-1)}
         className="absolute left-0 top-1/2 -translate-y-1/2 bg-brand-forest text-brand-white p-2 rounded-full hover:bg-brand-charcoal transition-all z-10"
         aria-label="Previous"
-      >
-        <
-      </button>
+      ></button>
       <button
         onClick={() => scrollBy(1)}
         className="absolute right-0 top-1/2 -translate-y-1/2 bg-brand-forest text-brand-white p-2 rounded-full hover:bg-brand-charcoal transition-all z-10"
         aria-label="Next"
-      >
-        >
-      </button>
+      ></button>
     </div>
   );
 }
