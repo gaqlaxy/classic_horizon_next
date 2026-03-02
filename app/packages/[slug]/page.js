@@ -7,7 +7,7 @@ import { useRef, use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 
 // Data and Components
-import data from "../../data.json";
+import { getLocations, getPackages } from "../../lib/data";
 import PackageHero from "../../components/pdp/PackageHero";
 import PromiseStrip from "../../components/pdp/PromiseStrip";
 import ExperienceSection from "../../components/pdp/ExperienceSection";
@@ -23,7 +23,9 @@ if (typeof window !== "undefined") {
 
 export default function PackageDetailPage({ params }) {
     const { slug } = use(params);
-    const pkg = data.packages.find(p => p.slug === slug);
+    const packages = getPackages();
+    const locations = getLocations();
+    const pkg = packages.find(p => p.slug === slug);
     const containerRef = useRef();
 
     // State
@@ -35,7 +37,7 @@ export default function PackageDetailPage({ params }) {
         notFound();
     }
 
-    const location = data.locations.find(l => l.id === pkg.location);
+    const location = locations.find(l => l.id === pkg.location);
 
     const toggleCustomization = (idx, type) => {
         setCustomizations(prev => ({
@@ -51,7 +53,7 @@ export default function PackageDetailPage({ params }) {
         const stored = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
 
         const recentPkgs = stored
-            .map(s => data.packages.find(p => p.slug === s))
+            .map(s => packages.find(p => p.slug === s))
             .filter(p => p && p.slug !== pkg.slug);
 
         setRecentlyViewed(recentPkgs.slice(0, 3));

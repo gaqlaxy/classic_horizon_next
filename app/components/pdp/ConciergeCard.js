@@ -60,7 +60,7 @@ export default function ConciergeCard({
                     <div className="space-y-4">
                         <Link href={`/booking?package=${encodeURIComponent(pkgName)}`} className={`group flex items-center justify-between w-full p-6 text-[11px] font-bold uppercase tracking-[0.3em] transition-all shadow-xl hover:shadow-2xl ${hasUpgrades ? 'bg-brand-accent text-brand-forest' : 'bg-brand-forest text-brand-white hover:bg-brand-charcoal'}`}>
                             {hasUpgrades ? "Request Bespoke Quote" : "Begin Reservation"}
-                            <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
+                            <span className="group-hover:translate-x-2 transition-transform duration-300">-></span>
                         </Link>
                         <a href="tel:+910000000000" className="block w-full text-center border-2 border-brand-forest text-brand-forest p-6 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-brand-forest hover:text-brand-white transition-all">
                             Speak to an Expert

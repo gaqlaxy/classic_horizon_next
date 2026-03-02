@@ -66,7 +66,7 @@ export default function Footer() {
 
             <div className="container mx-auto px-6 md:px-12 mt-20 pt-8 border-t border-brand-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
                 <p className="text-brand-white/40 text-xs">
-                    © {new Date().getFullYear()} Classic Horizon Travel Agency · All rights reserved
+                    © {new Date().getFullYear()} Classic Horizon Travel Agency - All rights reserved
                 </p>
                 <div className="flex gap-8">
                     <Link href="/privacy" className="text-brand-white/40 hover:text-brand-white text-xs transition-colors">Privacy Policy</Link>

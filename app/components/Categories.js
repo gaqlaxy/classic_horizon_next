@@ -5,7 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
 import Link from "next/link";
-import data from "../data.json";
+import { getCategories } from "../lib/data";
 
 export default function Categories() {
     const containerRef = useRef();
@@ -38,7 +38,7 @@ export default function Categories() {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    {data.categories.map((category) => (
+                    {getCategories().map((category) => (
                         <Link
                             key={category.id}
                             href={`/packages?category=${category.id}`}

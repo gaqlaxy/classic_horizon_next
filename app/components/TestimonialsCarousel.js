@@ -60,14 +60,14 @@ export default function TestimonialsCarousel({ reviews }) {
         className="absolute left-0 top-1/2 -translate-y-1/2 bg-brand-forest text-brand-white p-2 rounded-full hover:bg-brand-charcoal transition-all z-10"
         aria-label="Previous"
       >
-        ‹
+        <
       </button>
       <button
         onClick={() => scrollBy(1)}
         className="absolute right-0 top-1/2 -translate-y-1/2 bg-brand-forest text-brand-white p-2 rounded-full hover:bg-brand-charcoal transition-all z-10"
         aria-label="Next"
       >
-        ›
+        >
       </button>
     </div>
   );

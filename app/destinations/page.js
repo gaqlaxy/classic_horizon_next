@@ -4,13 +4,15 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
 import Link from "next/link";
-import data from "../data.json";
+import { getLocations, getPackages } from "../lib/data";
 
 export default function DestinationsPage() {
     const containerRef = useRef();
 
+    const locations = getLocations();
+    const packages = getPackages();
     // Group locations by region
-    const regions = data.locations.reduce((acc, loc) => {
+    const regions = locations.reduce((acc, loc) => {
         if (!acc[loc.region]) acc[loc.region] = [];
         acc[loc.region].push(loc);
         return acc;
@@ -56,7 +58,7 @@ export default function DestinationsPage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                                 {locations.map((loc) => {
                                     // Find a representative image from the packages for this location
-                                    const representativePkg = data.packages.find(p => p.location === loc.id);
+                                    const representativePkg = packages.find(p => p.location === loc.id);
                                     const image = representativePkg?.image || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800";
 
                                     return (
@@ -78,7 +80,7 @@ export default function DestinationsPage() {
                                                 <div>
                                                     <h3 className="text-3xl font-heading font-bold text-brand-forest mb-2">{loc.name}</h3>
                                                     <p className="text-brand-charcoal/40 text-[10px] font-bold uppercase tracking-widest">
-                                                        {data.packages.filter(p => p.location === loc.id).length} Available Packages
+                                                        {packages.filter(p => p.location === loc.id).length} Available Packages
                                                     </p>
                                                 </div>
                                                 <Link

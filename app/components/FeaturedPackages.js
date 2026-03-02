@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import Link from "next/link";
-import data from "../data.json";
+import { getLocations, getPackages } from "../lib/data";
 
 export default function FeaturedPackages() {
     const containerRef = useRef();
@@ -25,8 +25,9 @@ export default function FeaturedPackages() {
         });
     }, { scope: containerRef });
 
+    const locations = getLocations();
     // Get top 3 featured packages
-    const featuredPkgs = data.packages.slice(0, 3);
+    const featuredPkgs = getPackages().slice(0, 3);
 
     return (
         <section ref={containerRef} className="py-24 bg-brand-white">
@@ -38,7 +39,9 @@ export default function FeaturedPackages() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    {featuredPkgs.map((pkg) => (
+                    {featuredPkgs.map((pkg) => {
+                        const location = locations.find(l => l.id === pkg.location);
+                        return (
                         <Link key={pkg.id} href={`/packages/${pkg.slug}`} className="pkg-card group block">
                             <div className="relative aspect-[4/5] overflow-hidden mb-6">
                                 <img
@@ -62,7 +65,7 @@ export default function FeaturedPackages() {
                                         {pkg.title}
                                     </h3>
                                     <p className="text-brand-charcoal/40 text-xs font-bold uppercase tracking-widest">
-                                        {data.locations.find(l => l.id === pkg.location)?.name}, {data.locations.find(l => l.id === pkg.location)?.country}
+                                        {location?.name}, {location?.country}
                                     </p>
                                 </div>
                                 <div className="text-right">
@@ -71,7 +74,8 @@ export default function FeaturedPackages() {
                                 </div>
                             </div>
                         </Link>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <div className="mt-20 text-center">

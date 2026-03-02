@@ -5,11 +5,11 @@ import gsap from "gsap";
 import { useRef, use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import data from "../../data.json";
+import { getLocationById, getPackagesByLocation } from "../../lib/data";
 
 export default function DestinationDetailPage({ params }) {
     const { slug } = use(params);
-    const destination = data.locations.find(l => l.id === slug);
+    const destination = getLocationById(slug);
     const containerRef = useRef();
 
     if (!destination) {
@@ -17,7 +17,7 @@ export default function DestinationDetailPage({ params }) {
     }
 
     // Filter packages for this destination
-    const destinationPackages = data.packages.filter(p => p.location === slug);
+    const destinationPackages = getPackagesByLocation(slug);
 
     // Find a representative image (first package image)
     const heroImage = destinationPackages[0]?.image || "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200";
@@ -59,11 +59,11 @@ export default function DestinationDetailPage({ params }) {
 
                 <div className="container mx-auto px-6 md:px-12 relative z-10">
                     <Link href="/destinations" className="reveal-content inline-flex items-center gap-2 text-brand-white/70 hover:text-brand-accent text-xs font-bold uppercase tracking-widest mb-8 transition-colors">
-                        <span className="text-lg">←</span> Back to Destinations
+                        <span className="text-lg">&lt;-</span> Back to Destinations
                     </Link>
                     <div className="max-w-4xl">
                         <span className="reveal-content inline-block bg-brand-accent text-brand-forest text-[10px] font-bold uppercase tracking-widest px-3 py-1 mb-4">
-                            {destination.region} • {destination.country}
+                            {destination.region} - {destination.country}
                         </span>
                         <h1 className="reveal-content text-6xl md:text-9xl font-heading font-bold text-brand-white mb-6 tracking-tighter leading-tight">
                             {destination.name}
@@ -110,11 +110,11 @@ export default function DestinationDetailPage({ params }) {
                                             {pkg.title}
                                         </h4>
                                         <p className="text-brand-charcoal/40 text-[10px] font-bold uppercase tracking-widest">
-                                            {pkg.category} • {pkg.duration}
+                                            {pkg.category} - {pkg.duration}
                                         </p>
                                     </div>
                                     <div className="h-10 w-10 flex items-center justify-center border border-brand-charcoal/10 rounded-full group-hover:border-brand-accent group-hover:bg-brand-accent group-hover:text-brand-forest transition-all duration-300">
-                                        <span className="text-lg">→</span>
+                                        <span className="text-lg">-&gt;</span>
                                     </div>
                                 </div>
                             </Link>

@@ -184,7 +184,7 @@ function BookingForm() {
                     <div className="mt-16 flex justify-between items-center">
                         {step > 1 ? (
                             <button type="button" onClick={handleBack} className="text-xs font-bold uppercase tracking-widest text-brand-charcoal/40 hover:text-brand-forest transition-colors">
-                                ← Back
+                                <- Back
                             </button>
                         ) : <div />}
                         <button type="submit" className="px-12 py-5 bg-brand-forest text-brand-white font-bold uppercase tracking-widest text-xs hover:bg-brand-charcoal transition-all">
@@ -194,7 +194,7 @@ function BookingForm() {
                 </form>
 
                 <p className="mt-12 text-center text-brand-charcoal/30 text-[10px] font-bold uppercase tracking-[0.2em]">
-                    Bespoke Travel Planning • Classic Horizon 2026
+                    Bespoke Travel Planning - Classic Horizon 2026
                 </p>
             </div>
         </div>

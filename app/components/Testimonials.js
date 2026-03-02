@@ -3,7 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef, useState } from "react";
-import data from "../data.json";
+import { getReviews } from "../lib/data";
 import FeaturedTestimonial from "./testimonials/FeaturedTestimonial";
 import TestimonialGrid from "./testimonials/TestimonialGrid";
 import PaginationDots from "./testimonials/PaginationDots";
@@ -12,9 +12,10 @@ export default function Testimonials() {
   const containerRef = useRef();
   const [currentFeaturedIdx, setCurrentFeaturedIdx] = useState(0);
 
+  const reviews = getReviews();
   // Get featured testimonial and remaining ones
-  const featuredReview = data.reviews[currentFeaturedIdx];
-  const otherReviews = data.reviews.filter((_, idx) => idx !== currentFeaturedIdx);
+  const featuredReview = reviews[currentFeaturedIdx];
+  const otherReviews = reviews.filter((_, idx) => idx !== currentFeaturedIdx);
 
   useGSAP(() => {
     // Fade in section title
@@ -108,10 +109,10 @@ export default function Testimonials() {
         </div>
 
         {/* Pagination Dots */}
-        {data.reviews.length > 1 && (
+        {reviews.length > 1 && (
           <div className="pagination-wrapper flex justify-center md:justify-start">
             <PaginationDots
-              total={data.reviews.length}
+              total={reviews.length}
               current={currentFeaturedIdx}
               onChange={handleFeaturedChange}
               className="mt-8"
@@ -125,8 +126,8 @@ export default function Testimonials() {
             href="#"
             className="inline-flex items-center gap-3 text-brand-accent font-bold text-sm uppercase tracking-widest hover:gap-4 transition-all duration-300"
           >
-            Read All {data.reviews.length} Reviews
-            <span>→</span>
+            Read All {reviews.length} Reviews
+            <span>-&gt;</span>
           </a>
         </div>
       </div>

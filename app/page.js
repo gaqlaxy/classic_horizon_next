@@ -65,7 +65,7 @@ export default function Home() {
               </button>
             </div>
             <p className="mt-8 text-brand-charcoal/40 text-[10px] uppercase tracking-widest font-bold">
-              ✓ Periodic Inspiration &nbsp; • &nbsp; ✓ Exclusive Offers &nbsp; • &nbsp; ✓ Secure Privacy
+              ✓ Periodic Inspiration &nbsp; - &nbsp; ✓ Exclusive Offers &nbsp; - &nbsp; ✓ Secure Privacy
             </p>
           </div>
         </div>

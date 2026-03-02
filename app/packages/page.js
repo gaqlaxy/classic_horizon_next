@@ -5,7 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Flip } from "gsap/Flip";
 import Link from "next/link";
-import data from "../data.json";
+import { getLocations, getPackages } from "../lib/data";
 
 gsap.registerPlugin(Flip);
 
@@ -22,13 +22,15 @@ export default function PackagesPage() {
         setRecentlyViewed(stored);
     }, []);
 
-    const regions = ["All", ...new Set(data.locations.map(l => l.region))];
+    const locations = getLocations();
+    const allPackages = getPackages();
+    const regions = ["All", ...new Set(locations.map(l => l.region))];
 
     // Filtering logic
     let packages = filter === "all"
-        ? [...data.packages]
-        : data.packages.filter(pkg => {
-            const location = data.locations.find(l => l.id === pkg.location);
+        ? [...allPackages]
+        : allPackages.filter(pkg => {
+            const location = locations.find(l => l.id === pkg.location);
             return location?.region.toLowerCase() === filter.toLowerCase();
         });
 
@@ -179,7 +181,7 @@ export default function PackagesPage() {
                                         {/* Card Content Overlay */}
                                         <div className={`absolute inset-0 bg-brand-forest/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center`}>
                                             <span className="px-6 py-3 bg-white text-brand-forest text-[10px] font-bold uppercase tracking-widest scale-90 group-hover:scale-100 transition-transform duration-500">
-                                                View Trip Details →
+                                                View Trip Details ->
                                             </span>
                                         </div>
 
@@ -209,7 +211,7 @@ export default function PackagesPage() {
                                                 </div>
                                                 <p className="text-brand-charcoal/60 text-sm line-clamp-2 max-w-xl mb-6">{pkg.description}</p>
                                                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-charcoal/40">
-                                                    {data.locations.find(l => l.id === pkg.location)?.name} • {data.locations.find(l => l.id === pkg.location)?.country}
+                                                    {locations.find(l => l.id === pkg.location)?.name} - {locations.find(l => l.id === pkg.location)?.country}
                                                 </span>
                                             </div>
                                         )}
@@ -221,14 +223,14 @@ export default function PackagesPage() {
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <span className="text-[10px] text-brand-accent font-bold">★ {pkg.rating}</span>
                                                     <span className="text-[8px] text-brand-charcoal/30 font-bold uppercase tracking-widest">
-                                                        {data.locations.find(l => l.id === pkg.location)?.region}
+                                                        {locations.find(l => l.id === pkg.location)?.region}
                                                     </span>
                                                 </div>
                                                 <h3 className="text-xl font-heading font-bold text-brand-charcoal group-hover:text-brand-forest transition-colors leading-tight">
                                                     {pkg.title}
                                                 </h3>
                                                 <p className="text-brand-charcoal/40 text-[9px] font-bold uppercase tracking-[0.2em] mt-1">
-                                                    {data.locations.find(l => l.id === pkg.location)?.name} • {data.locations.find(l => l.id === pkg.location)?.country}
+                                                    {locations.find(l => l.id === pkg.location)?.name} - {locations.find(l => l.id === pkg.location)?.country}
                                                 </p>
                                             </div>
                                             <div className="text-right">
@@ -280,11 +282,11 @@ export default function PackagesPage() {
                     <div className="flex-1 text-center lg:text-left">
                         <h2 className="text-4xl md:text-5xl font-heading font-bold text-brand-forest mb-6">Uniquely Yours.</h2>
                         <p className="text-brand-charcoal/60 text-lg mb-10 leading-relaxed max-w-2xl">
-                            Our travel curators can design a completely bespoke itinerary — tailored to your exact dates, budget, and travel style. No generic packages. Just your journey.
+                            Our travel curators can design a completely bespoke itinerary - tailored to your exact dates, budget, and travel style. No generic packages. Just your journey.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center gap-8">
                             <Link href="/booking" className="px-12 py-5 bg-brand-forest text-brand-white font-bold uppercase tracking-widest text-xs hover:bg-brand-charcoal transition-all">
-                                Request Custom Itinerary →
+                                Request Custom Itinerary ->
                             </Link>
                             <span className="text-xs text-brand-charcoal/40 font-bold uppercase">or call <strong className="text-brand-forest">+1 800 JOURNEY</strong></span>
                         </div>
@@ -313,7 +315,7 @@ export default function PackagesPage() {
                         </div>
                         <div className="flex gap-8 overflow-x-auto no-scrollbar pb-10">
                             {recentlyViewed.map((slug) => {
-                                const pkg = data.packages.find(p => p.slug === slug);
+                                const pkg = allPackages.find(p => p.slug === slug);
                                 if (!pkg) return null;
                                 return (
                                     <Link key={pkg.id} href={`/packages/${pkg.slug}`} className="shrink-0 w-80 group">
@@ -321,7 +323,7 @@ export default function PackagesPage() {
                                             <img src={pkg.image} alt={pkg.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
                                         </div>
                                         <h4 className="text-white font-bold text-lg mb-1 group-hover:text-brand-accent transition-colors">{pkg.title}</h4>
-                                        <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">${pkg.price} · {pkg.duration}</p>
+                                        <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">${pkg.price} - {pkg.duration}</p>
                                     </Link>
                                 )
                             })}
