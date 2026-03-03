@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Package Details Page — Alternative Layout Wireframe</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Comic Sans MS', 'Comic Sans', cursive; background: #fff; color: #333; font-size: 14px; line-height: 1.5; }
+
+    /* Badges for component tagging */
+    .badge { position: absolute; padding: 3px 8px; border-radius: 3px; font-size: 9px; font-family: Arial, sans-serif; font-weight: bold; z-index: 30; white-space: nowrap; pointer-events: none; }
+    .badge-reuse { background: #4CAF50; color: white; }
+    .badge-new { background: #FF9800; color: white; }
+    .rel { position: relative; }
+
+    /* Utility classes */
+    .img-ph { background: #ddd; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; border: 2px dashed #aaa; text-align: center; padding: 10px; }
+    .btn { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #333; color: #fff; cursor: pointer; font-family: inherit; font-size: 13px; }
+    .btn-o { display: inline-block; border: 2px solid #333; padding: 10px 26px; background: #fff; color: #333; cursor: pointer; font-family: inherit; font-size: 13px; }
+    hr { border: none; border-top: 1px solid #ccc; margin: 32px 0; }
+
+    /* Top bar */
+    .topbar { background: #222; color: #fff; padding: 12px 40px; font-size: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .topbar-pill { background: #fff; color: #222; padding: 3px 12px; font-size: 11px; font-weight: bold; border-radius: 2px; }
+
+    .legend { display: flex; gap: 20px; align-items: center; background: #f5f5f5; border-bottom: 1px solid #ccc; padding: 8px 40px; font-size: 11px; font-family: Arial, sans-serif; flex-wrap: wrap; }
+    .legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 4px; }
+
+    .sec { padding: 40px; max-width: 1440px; margin: 0 auto; }
+    .sec-title { font-size: 28px; font-weight: bold; margin-bottom: 8px; }
+    .sec-sub { font-size: 14px; color: #666; margin-bottom: 24px; }
+
+    /* HERO SECTION */
+    .pdp-hero { position: relative; height: 500px; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+    .pdp-hero-bg { width: 100%; height: 100%; }
+    .pdp-hero-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); }
+    .pdp-hero-content { position: relative; padding: 40px; color: #fff; z-index: 2; }
+    .pdp-back { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; margin-bottom: 16px; }
+    .pdp-badge { display: inline-block; background: rgba(0,0,0,0.6); color: #fff; padding: 4px 12px; font-size: 10px; font-weight: bold; margin-bottom: 12px; border-radius: 2px; }
+    .pdp-title { font-size: 48px; font-weight: bold; margin-bottom: 12px; line-height: 1.2; max-width: 600px; }
+    .pdp-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+
+    /* Promise strip */
+    .promise-strip { background: #f5f5f5; padding: 24px 40px; }
+    .promise-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
+    .promise-item { text-align: center; }
+    .promise-label { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .promise-desc { font-size: 10px; color: #666; line-height: 1.4; }
+
+    /* Tab navigation */
+    .section-tabs { display: flex; gap: 0; border-bottom: 2px solid #ddd; margin: 0 40px 40px; flex-wrap: wrap; }
+    .tab-item { padding: 12px 24px; border-bottom: 3px solid transparent; cursor: pointer; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+    .tab-item.active { color: #000; border-bottom-color: #000; }
+
+    /* Main content wrapper with sidebar */
+    .content-wrapper { display: grid; grid-template-columns: 1fr 320px; gap: 32px; align-items: start; margin: 0 40px; }
+
+    /* Content sections */
+    .content-section { margin-bottom: 40px; }
+    .exp-title { font-size: 12px; font-weight: bold; color: #999; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+    .exp-quote { font-size: 22px; font-style: italic; line-height: 1.6; margin-bottom: 24px; max-width: 700px; }
+
+    /* Inclusions grid */
+    .inclusions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 40px; }
+    .inclusion-card { background: #f9f9f9; border: 1px solid #ddd; padding: 16px; }
+    .inclusion-title { font-size: 11px; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
+    .inclusion-desc { font-size: 10px; color: #555; line-height: 1.5; }
+
+    /* Itinerary */
+    .itinerary-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; gap: 20px; flex-wrap: wrap; }
+    .itinerary-info { max-width: 500px; }
+    .itinerary-desc { font-size: 11px; color: #666; line-height: 1.6; margin-top: 8px; }
+    .itinerary-toggle { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 2px solid #333; background: #fff; cursor: pointer; font-size: 11px; font-weight: bold; border-radius: 2px; white-space: nowrap; }
+    .itinerary-toggle.active { background: #333; color: #fff; }
+
+    /* Itinerary cards grid */
+    .itinerary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .day-card { background: #fff; border: 1px solid #ddd; padding: 20px; position: relative; transition: all 0.3s; }
+    .day-card:hover { border-color: #333; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .day-card.luxury { background: #f0f0f0; border-color: #333; border-width: 2px; }
+    .day-number { font-size: 28px; font-weight: bold; color: #ddd; margin-bottom: 8px; }
+    .day-card.luxury .day-number { color: #999; }
+    .day-title { font-size: 16px; font-weight: bold; margin-bottom: 8px; }
+    .day-desc { font-size: 11px; color: #555; line-height: 1.6; }
+    .day-upgrade-badge { display: inline-block; background: #333; color: #fff; font-size: 8px; font-weight: bold; padding: 3px 8px; margin-top: 8px; border-radius: 2px; }
+    .day-perks { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+    .perk-tag { font-size: 9px; background: #fff; border: 1px solid #999; padding: 3px 8px; border-radius: 2px; }
+
+    /* Sidebar card */
+    .sidebar-card { background: #fff; border: 2px solid #333; padding: 24px; position: sticky; top: 20px; height: fit-content; }
+    .sidebar-title { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: bold; }
+    .sidebar-price { font-size: 42px; font-weight: bold; margin-bottom: 8px; }
+    .sidebar-note { font-size: 9px; color: #999; margin-bottom: 16px; font-style: italic; }
+
+    /* Price summary */
+    .price-summary { background: #f5f5f5; padding: 12px; margin-bottom: 16px; border-left: 3px solid #333; }
+    .price-row { display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 6px; }
+    .price-row:last-child { margin-bottom: 0; font-weight: bold; border-top: 1px solid #ddd; padding-top: 6px; }
+
+    /* Details table */
+    .details-table { margin-bottom: 20px; }
+    .details-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e0e0e0; font-size: 10px; }
+    .details-label { color: #999; font-weight: bold; text-transform: uppercase; }
+    .details-value { font-weight: bold; }
+
+    /* CTA buttons */
+    .cta-buttons { display: flex; flex-direction: column; gap: 8px; }
+    .cta-primary { background: #333; color: #fff; border: 2px solid #333; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; font-size: 11px; }
+    .cta-secondary { background: #fff; color: #333; border: 2px solid #333; padding: 12px; text-align: center; font-weight: bold; cursor: pointer; font-size: 11px; }
+
+    .policy-note { font-size: 8px; color: #999; text-align: center; border-top: 1px solid #e0e0e0; padding-top: 12px; margin-top: 12px; line-height: 1.4; }
+
+    /* Recently Viewed */
+    .recent-section { background: #f9f9f9; padding: 40px; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+    .recent-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+    .recent-card { }
+    .recent-image { background: #ddd; height: 180px; margin-bottom: 12px; position: relative; border: 1px solid #ccc; }
+    .recent-category { font-size: 9px; color: #999; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; }
+    .recent-title { font-size: 14px; font-weight: bold; }
+
+    /* Discovery CTA */
+    .discovery-section { background: #222; color: #fff; padding: 60px 40px; text-align: center; }
+    .discovery-title { font-size: 40px; font-weight: bold; margin-bottom: 24px; line-height: 1.3; }
+    .discovery-ctas { display: flex; gap: 12px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+
+    /* Annotation & documentation */
+    .annotation { background: #fffacd; border-left: 3px solid #ddd; padding: 8px 12px; margin: 16px 0; font-size: 10px; color: #555; }
+    .section-label { background: #f0f0f0; border-left: 3px solid #333; padding: 12px 16px; margin: 24px 0 16px; font-size: 11px; font-weight: bold; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sec { padding: 24px 20px; }
+      .pdp-hero { height: 400px; }
+      .pdp-title { font-size: 32px; }
+      .pdp-hero-content { padding: 24px; }
+      .content-wrapper { grid-template-columns: 1fr; gap: 20px; margin: 0 0; }
+      .sidebar-card { position: relative; top: 0; }
+      .section-tabs { margin: 0 0 24px; }
+      .promise-grid { grid-template-columns: repeat(2, 1fr); }
+      .itinerary-cards { grid-template-columns: 1fr; }
+      .inclusions-grid { grid-template-columns: 1fr; }
+      .recent-section { padding: 24px; }
+      .recent-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; }
+      .discovery-title { font-size: 28px; }
+    }
+
+    @media (max-width: 480px) {
+      .topbar { padding: 10px 20px; font-size: 11px; }
+      .sec { padding: 20px; }
+      .pdp-hero { height: 300px; }
+      .pdp-hero-content { padding: 20px; }
+      .pdp-title { font-size: 24px; }
+      .promise-grid { grid-template-columns: 1fr; }
+      .itinerary-header { flex-direction: column; }
+      .itinerary-toggle { width: 100%; justify-content: center; }
+      .recent-grid { grid-template-columns: 1fr; }
+      .discovery-ctas { flex-direction: column; }
+    }
+
+    /* Documentation table */
+    .doc-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 16px; }
+    .doc-table thead tr { background: #f0f0f0; border-bottom: 1px solid #ddd; }
+    .doc-table th { padding: 10px; text-align: left; border-right: 1px solid #ddd; font-weight: bold; }
+    .doc-table td { padding: 10px; border-right: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+    .doc-table tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+<!-- TOP LABEL BAR -->
+<div class="topbar">
+  <span>🎫 Package Details — Alternative Layout · <strong>Classic Horizon Travel</strong></span>
+  <span class="topbar-pill">Balsamiq Wireframe · Grayscale Only</span>
+</div>
+
+<div class="legend">
+  <span><span class="legend-dot" style="background:#4CAF50;"></span><strong>[REUSE]</strong> = Existing component</span>
+  <span><span class="legend-dot" style="background:#FF9800;"></span><strong>[NEW]</strong> = Custom component</span>
+  <span style="margin-left: auto; font-size: 10px; color: #999;">✦ Floating sticky sidebar · Card-based itinerary · Tab navigation (optional) · Mobile-optimized</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ HERO SECTION -->
+<section class="pdp-hero rel">
+  <span class="badge badge-new" style="top: 12px; left: 12px;">[NEW] PackageHero</span>
+  <div class="img-ph pdp-hero-bg" style="height: 100%;">
+    [ Fullscreen Package Background Image · 1440×500px ]<br>
+    <span style="font-size: 11px; margin-top: 4px;">(Parallax effect on scroll)</span>
+  </div>
+  <div class="pdp-hero-overlay"></div>
+  
+  <div class="pdp-hero-content">
+    <span class="badge badge-reuse" style="top: 0; right: 12px;">[REUSE] Link</span>
+    <div class="pdp-back">← Return to Collections</div>
+    <div class="pdp-badge">Spiritual • 7 Days</div>
+    <h1 class="pdp-title">Spiritual Retreat in Rishikesh</h1>
+    <div class="pdp-meta">
+      <span>━</span>
+      <span>Rishikesh • India</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ PROMISE STRIP -->
+<section class="promise-strip rel">
+  <span class="badge badge-reuse" style="top: -8px; right: 40px;">[REUSE] Grid</span>
+  <div class="promise-grid">
+    <div class="promise-item">
+      <div class="promise-label">✓ Bespoke Planning</div>
+      <div class="promise-desc">Tailored to your rhythm</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-label">✓ Luxury Stays</div>
+      <div class="promise-desc">Handpicked premium villas</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-label">✓ Local Expertise</div>
+      <div class="promise-desc">Deep cultural insights</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-label">✓ 24/7 Concierge</div>
+      <div class="promise-desc">Unfiltered peace of mind</div>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════ TAB NAVIGATION -->
+<section rel>
+  <span class="badge badge-reuse" style="top: -8px; left: 40px;">[REUSE] Tabs</span>
+  <div class="section-tabs">
+    <div class="tab-item active">Overview</div>
+    <div class="tab-item">Experience Details</div>
+    <div class="tab-item">Itinerary</div>
+    <div class="tab-item">Reviews</div>
+  </div>
+  <div class="annotation" style="margin: 0 40px 16px;">
+    ℹ️ Optional tab navigation for content organization. Allows future expansion (e.g., Reviews section). Click tabs to switch between sections.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ MAIN CONTENT GRID WITH FLOATING SIDEBAR -->
+<section>
+  <div class="content-wrapper rel">
+    <span class="badge badge-new" style="top: 0; right: -340px;">[NEW] ConciergeCard</span>
+
+    <!-- LEFT COLUMN: Main Content -->
+    <div>
+
+      <!-- EXPERIENCE SECTION -->
+      <div class="content-section rel">
+        <span class="badge badge-new" style="top: -8px; left: 0;">[NEW] ExperienceSection</span>
+        <h2 class="exp-title">The Experience</h2>
+        <p class="exp-quote">
+          "Experience inner peace at the yoga capital of the world. A bespoke spiritual journey along the Ganges."
+        </p>
+
+        <h3 class="exp-title" style="margin-top: 32px;">What's Included</h3>
+        <div class="inclusions-grid rel">
+          <span class="badge badge-reuse" style="top: -6px; right: -6px;">[REUSE] Card</span>
+          <div class="inclusion-card">
+            <div class="inclusion-title">Private Transfers</div>
+            <div class="inclusion-desc">Luxury ground transportation throughout your stay</div>
+          </div>
+          <div class="inclusion-card">
+            <div class="inclusion-title">Premium Lodging</div>
+            <div class="inclusion-desc">Hand-picked 5-star accommodations</div>
+          </div>
+          <div class="inclusion-card">
+            <div class="inclusion-title">Expert Guide</div>
+            <div class="inclusion-desc">Local cultural & spiritual expert guidance</div>
+          </div>
+          <div class="inclusion-card">
+            <div class="inclusion-title">Curated Dining</div>
+            <div class="inclusion-desc">Authentic local cuisine & special meals</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ITINERARY SECTION -->
+      <div class="content-section rel">
+        <span class="badge badge-new" style="top: -8px; left: 0;">[NEW] ItineraryCustomizer</span>
+        
+        <div class="itinerary-header">
+          <div class="itinerary-info">
+            <h2 class="exp-title">Your Journey</h2>
+            <p class="itinerary-desc">
+              Personalize individual days to elevate your experience with luxury upgrades and bespoke arrangements.
+            </p>
+          </div>
+          <button class="itinerary-toggle" data-state="inactive">
+            <span>●</span> Personalize Journey
+          </button>
+        </div>
+
+        <div class="annotation">
+          💡 Click [Personalize Journey] to enable interactive mode. Day cards become clickable. Price updates in sidebar in real-time.
+        </div>
+
+        <!-- Itinerary cards - Responsive card grid -->
+        <div class="itinerary-cards rel">
+          <span class="badge badge-reuse" style="top: -8px; right: -8px;">[REUSE] Card, Badge</span>
+          
+          <div class="day-card">
+            <div class="day-number">01</div>
+            <div class="day-title">Arrival and Ganga Aarti</div>
+            <div class="day-desc">Welcome to Rishikesh. Settle into your accommodation and witness the sacred Ganga Aarti ceremony at sunset.</div>
+          </div>
+
+          <div class="day-card luxury">
+            <div class="day-number">02</div>
+            <div class="day-title">Morning Yoga and Meditation</div>
+            <div class="day-desc">Enhanced with private chauffeured transfers and a personalized champagne reception.</div>
+            <div class="day-upgrade-badge">Luxury Upgrade</div>
+            <div class="day-perks">
+              <span class="perk-tag">✓ Private Guide</span>
+              <span class="perk-tag">✓ VIP Access</span>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">03</div>
+            <div class="day-title">Temple Tour</div>
+            <div class="day-desc">Explore ancient temples and learn about spiritual traditions from expert guides.</div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">04</div>
+            <div class="day-title">River Rafting & Relaxation</div>
+            <div class="day-desc">Adventure on the Ganges followed by rejuvenating spa treatments.</div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">05</div>
+            <div class="day-title">Ashram Experience</div>
+            <div class="day-desc">Immerse yourself in ashram life with meditation and traditional teachings.</div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">06</div>
+            <div class="day-title">Ayurvedic Spa Day</div>
+            <div class="day-desc">Full-day wellness with traditional Ayurvedic treatments and holistic healing.</div>
+          </div>
+
+          <div class="day-card">
+            <div class="day-number">07</div>
+            <div class="day-title">Farewell Breakfast</div>
+            <div class="day-desc">Final morning meditation and departure with newfound inner peace.</div>
+          </div>
+        </div>
+
+        <div class="annotation">
+          ⚙️ When customizing, click any day card to toggle between "standard" and "luxury". Each upgrade adds +$250. Sidebar updates dynamically.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Floating Sticky Sidebar -->
+    <div>
+      <div class="sidebar-card">
+        <div class="sidebar-title">Estimated Investment</div>
+        <div class="sidebar-price">$1,200</div>
+        <div class="sidebar-note">Final estimate pending curation</div>
+
+        <!-- Price breakdown (shown when customizing) -->
+        <div class="price-summary" style="display: none;">
+          <div class="price-row">
+            <span>Base Price (7 days)</span>
+            <span>$1,200</span>
+          </div>
+          <div class="price-row">
+            <span>Day 2 Luxury Upgrade</span>
+            <span>+$250</span>
+          </div>
+          <div class="price-row">
+            <span>Total</span>
+            <span>$1,450</span>
+          </div>
+        </div>
+
+        <div class="annotation" style="margin: 12px 0; font-size: 9px;">
+          📊 Price breakdown appears when upgrades are active. Shows itemized cost for each upgrade.
+        </div>
+
+        <!-- Details Table -->
+        <div class="details-table">
+          <span class="badge badge-reuse" style="top: -6px; right: -6px;">[REUSE] Table</span>
+          <div class="details-row">
+            <span class="details-label">Duration</span>
+            <span class="details-value">7 Days</span>
+          </div>
+          <div class="details-row">
+            <span class="details-label">Configuration</span>
+            <span class="details-value">Standard</span>
+          </div>
+          <div class="details-row">
+            <span class="details-label">Concierge</span>
+            <span class="details-value">Private</span>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="cta-buttons rel">
+          <span class="badge badge-reuse" style="top: -6px; left: -6px;">[REUSE] Button</span>
+          <button class="cta-primary">Begin Reservation →</button>
+          <button class="cta-secondary">Speak to an Expert</button>
+        </div>
+
+        <!-- Policy Note -->
+        <div class="policy-note">
+          Protected by our<br>Flexible Modification Policy
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════ RECENTLY VIEWED SECTION -->
+<section class="recent-section rel">
+  <span class="badge badge-new" style="top: 24px; right: 40px;">[NEW] RecentlyViewed</span>
+  <h2 class="sec-title">Your Recently Explored</h2>
+  <div class="annotation" style="margin-bottom: 24px;">
+    💾 Loaded from localStorage. Shows up to 3 most recent packages (excluding current). Client-side state management. Auto-responsive grid.
+  </div>
+
+  <div class="recent-grid">
+    <div class="recent-card rel">
+      <span class="badge badge-reuse" style="top: -6px; right: -6px;">[REUSE] Card</span>
+      <div class="recent-image">[ Bali Tropical Paradise · 220×180px ]</div>
+      <div class="recent-category">Honeymoon</div>
+      <h3 class="recent-title">Bali Tropical Paradise</h3>
+    </div>
+
+    <div class="recent-card rel">
+      <span class="badge badge-reuse" style="top: -6px; right: -6px;">[REUSE] Card</span>
+      <div class="recent-image">[ Santorini Sunset Odyssey · 220×180px ]</div>
+      <div class="recent-category">Vacation</div>
+      <h3 class="recent-title">Santorini Sunset Odyssey</h3>
+    </div>
+
+    <div class="recent-card rel">
+      <span class="badge badge-reuse" style="top: -6px; right: -6px;">[REUSE] Card</span>
+      <div class="recent-image">[ Kyoto Zen Heritage · 220×180px ]</div>
+      <div class="recent-category">Spiritual</div>
+      <h3 class="recent-title">Kyoto Zen Heritage</h3>
+    </div>
+  </div>
+</section>
+
+<hr>
+
+<!-- ═══════════════════════════════════════════════════════ DISCOVERY CTA SECTION -->
+<section class="discovery-section rel">
+  <span class="badge badge-new" style="top: 12px; right: 12px;">[NEW] DiscoveryCTA</span>
+  <p style="font-size: 11px; color: #aaa; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px;">Endless Horizons</p>
+  <h2 class="discovery-title">Your next extraordinary chapter awaits.</h2>
+  
+  <div class="discovery-ctas">
+    <button class="btn">Browse All Collections</button>
+    <button class="btn-o" style="border-color: #fff; color: #fff;">Map our Destinations</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ DESIGN DOCUMENTATION -->
+<div class="sec" style="background: #f9f9f9; border-top: 2px solid #333;">
+  <h2 class="sec-title">Design Overview: Alternative Layout</h2>
+  <p class="sec-sub">Key improvements over original 2-column grid design</p>
+
+  <div class="section-label">Layout Strategy</div>
+  <div class="annotation">
+    <strong>Desktop (1024px+):</strong> Two-column grid with floating sticky sidebar. Content flows on left, sidebar stays in viewport.<br>
+    <strong>Tablet (769-1023px):</strong> Single column with sticky sidebar (slight offset). Better tablet experience.<br>
+    <strong>Mobile (<768px):</strong> Full single-column stack. Sidebar becomes inline card. No sticky positioning. Better touch interactions.<br><br>
+    <strong>CSS Approach:</strong> Uses native `position: sticky` instead of JavaScript scroll tracking. More performant, fewer mobile bugs.
+  </div>
+
+  <div class="section-label">Component Breakdown</div>
+  <table class="doc-table">
+    <thead>
+      <tr>
+        <th>Section</th>
+        <th>Current Design</th>
+        <th>Alternative Design</th>
+        <th>Benefit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Hero</strong></td>
+        <td>680px (85vh)</td>
+        <td>500px (fixed)</td>
+        <td>Faster scroll to content. Better mobile UX.</td>
+      </tr>
+      <tr>
+        <td><strong>Promise Strip</strong></td>
+        <td>Fixed 4-col grid</td>
+        <td>Auto-responsive grid</td>
+        <td>Automatically adapts to screen size. No hardcoded breakpoints.</td>
+      </tr>
+      <tr>
+        <td><strong>Inclusions</strong></td>
+        <td>Sidebar callout in content</td>
+        <td>Separate grid cards</td>
+        <td>More prominent. Easier to scan. Better visual balance.</td>
+      </tr>
+      <tr>
+        <td><strong>Itinerary</strong></td>
+        <td>Stacked full-width rows</td>
+        <td>Responsive card grid (3→1 cols)</td>
+        <td>Better visual separation. Cleaner on desktop. Responsive without media queries.</td>
+      </tr>
+      <tr>
+        <td><strong>Sidebar</strong></td>
+        <td>2-col grid column with margin</td>
+        <td>Floating sticky card</td>
+        <td>Stays visible during scroll. Better CTA visibility. Mobile-optimized.</td>
+      </tr>
+      <tr>
+        <td><strong>Navigation</strong></td>
+        <td>None (single page)</td>
+        <td>Optional tabs</td>
+        <td>Content organization. Future-proof for reviews section.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">Responsive Behavior</div>
+  <div class="annotation">
+    <strong>Desktop (1024px+):</strong><br>
+    • Content + Sidebar in 2-col grid (1fr 320px)<br>
+    • Sidebar sticky at top: 20px<br>
+    • Height: fit-content (grows with sidebar content)<br>
+    • Itinerary cards: 3 per row<br>
+    • Inclusions cards: 4 per row (auto-fit)<br><br>
+    <strong>Tablet (769-1023px):</strong><br>
+    • Still 2-col but sidebar less prominent<br>
+    • Itinerary cards: 2 per row<br>
+    • Inclusions cards: 2 per row<br><br>
+    <strong>Mobile (<768px):</strong><br>
+    • Content full-width<br>
+    • Sidebar below (position: relative, not sticky)<br>
+    • Itinerary cards: 1 per row<br>
+    • Inclusions cards: 1 per row<br>
+    • Promise strip: 2 cols (better on mobile)<br>
+    • Tabs: Full width with horizontal scroll if needed
+  </div>
+
+  <div class="section-label">New vs. Reusable Components</div>
+  <div class="annotation">
+    <strong>[NEW] Components (6 total):</strong><br>
+    • PackageHero — Hero with overlay, GSAP parallax<br>
+    • ExperienceSection — Quote + description<br>
+    • ItineraryCustomizer — Interactive day cards in grid layout<br>
+    • ConciergeCard — Sticky sidebar with pricing + CTAs<br>
+    • RecentlyViewed — Recent packages grid<br>
+    • DiscoveryCTA — Bottom CTA section<br><br>
+    <strong>[REUSE] Components (7 total):</strong><br>
+    • Button (primary + secondary variants)<br>
+    • Card (inclusions, day cards, recent items)<br>
+    • Badge (category tags, upgrade badges)<br>
+    • Link (back button, recent package links)<br>
+    • Table (details table in sidebar)<br>
+    • Grid/Flex (layout containers)<br>
+    • Tabs (section navigation)
+  </div>
+
+  <div class="section-label">Key Features & Interactions</div>
+  <div class="annotation">
+    <strong>1. Floating Sticky Sidebar:</strong> Remains in viewport during scroll. Disables on mobile for better touch experience.<br><br>
+    <strong>2. Responsive Card Grids:</strong> Uses `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))`. Automatically adjusts columns based on available space. No manual breakpoints needed for itinerary.<br><br>
+    <strong>3. Tab Navigation:</strong> Optional section tabs (Overview/Details/Itinerary/Reviews). Allows content organization without page reload. Easy to add future sections like reviews/photos.<br><br>
+    <strong>4. Dynamic Pricing:</strong> Same state management as original. Sidebar updates in real-time as user selects luxury upgrades. Price breakdown shows itemized costs.<br><br>
+    <strong>5. GSAP Animations:</strong> Hero parallax, section reveals, and scroll triggers remain unchanged. ScrollTrigger refresh handles layout shifts during customization.<br><br>
+    <strong>6. Inclusions as Grid:</strong> Instead of sidebar callout, inclusions are prominent cards. Each card has icon space (future) for visual appeal.
+  </div>
+
+  <div class="section-label">Development Effort Estimate</div>
+  <div class="annotation">
+    <strong>Reusable Code: ~60%</strong> (Most logic remains the same)<br><br>
+    <strong>Changes Required:</strong><br>
+    ✓ CSS Layout — Update grid system and sticky positioning (~50 lines)<br>
+    ✓ ItineraryCustomizer — Change row layout to card grid (~30 line changes)<br>
+    ✓ ConciergeCard — Move from column to sticky card (~20 line changes)<br>
+    ✓ ExperienceSection — Extract inclusions to separate component (~40 lines)<br>
+    ✓ Add Tab Navigation — New simple tab component (~60 lines)<br><br>
+    <strong>No Changes Needed:</strong><br>
+    • PackageHero (same structure, minor CSS)<br>
+    • PromiseStrip (grid already responsive)<br>
+    • RecentlyViewed (grid already responsive)<br>
+    • DiscoveryCTA (no changes)<br>
+    • GSAP animations (work with new layout)<br>
+    • React state management (same logic)<br>
+    • localStorage tracking (same logic)<br><br>
+    <strong>Total Estimated Lines Changed: ~200</strong><br>
+    <strong>Implementation Time: ~4-6 hours for experienced developer</strong>
+  </div>
+
+  <div class="section-label">CSS Grid Utilities Reference</div>
+  <div class="annotation">
+    <strong>Responsive Grid (No Media Queries):</strong><br>
+    `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))`<br>
+    • Desktop: ~3-4 columns<br>
+    • Tablet: ~2 columns<br>
+    • Mobile: ~1 column<br><br>
+    <strong>Sticky Sidebar with Fallback:</strong><br>
+    ```css<br>
+    .sidebar-card {<br>
+      position: sticky;<br>
+      top: 20px;<br>
+      height: fit-content;<br>
+    }<br>
+    @media (max-width: 768px) {<br>
+      .sidebar-card { position: relative; }<br>
+    }```<br><br>
+    <strong>Promise Strip Auto-Responsive:</strong><br>
+    `grid-template-columns: repeat(auto-fit, minmax(150px, 1fr))`<br>
+    • Automatically: 4 cols → 2 cols → 1 col
+  </div>
+
+  <div class="section-label">Advantages Summary</div>
+  <div class="annotation">
+    ✅ <strong>Mobile-First Responsive:</strong> Auto-responsive grids, no sticky on mobile<br>
+    ✅ <strong>Better UX:</strong> Shorter hero, prominent inclusions, floating sidebar keeps CTAs visible<br>
+    ✅ <strong>Simpler CSS:</strong> CSS sticky vs. JavaScript scroll tracking<br>
+    ✅ <strong>Scalable:</strong> Tab navigation allows future sections (reviews, gallery)<br>
+    ✅ <strong>Performance:</strong> Same component count, fewer JavaScript calculations<br>
+    ✅ <strong>Maintainability:</strong> Clear separation of concerns, reusable grid utilities<br>
+    ✅ <strong>Accessibility:</strong> Semantic tabs, proper heading hierarchy<br>
+    ✅ <strong>Future-Proof:</strong> Easy to add reviews, photo gallery, testimonials
+  </div>
+</div>
+
+<div style="padding: 40px; background: #222; color: #fff; text-align: center; margin-top: 32px; border-top: 2px solid #fff;">
+  <p style="font-size: 13px; line-height: 1.8; margin-bottom: 16px;">
+    <strong>✓ Alternative Layout Wireframe Complete</strong><br>
+    Floating sticky sidebar · Responsive card grids · Tab navigation · Mobile-optimized<br>
+    <br>
+    <strong>Component Count:</strong> 6 New + 7 Reusable (same as original)<br>
+    <strong>Implementation:</strong> ~60% code reuse · ~200 lines changed
+  </p>
+  <p style="font-size: 11px; color: #aaa;">
+    Wireframe ready for developer review. Same data flows & animations. Ready for implementation.
+  </p>
+</div>
+
+</body>
+</html>

@@ -7,9 +7,9 @@ export default function PromiseStrip() {
     ];
 
     return (
-        <section className="bg-brand-forest border-y border-brand-white/10 py-10 relative z-20">
+        <section className="bg-brand-forest border-y border-brand-white/10 py-8 md:py-10 relative z-20">
             <div className="container mx-auto px-6 md:px-12">
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
                     {promises.map((item, i) => (
                         <div key={i} className="text-center lg:text-left">
                             <span className="block text-brand-accent text-[11px] font-bold uppercase tracking-[0.2em] mb-2">{item.label}</span>

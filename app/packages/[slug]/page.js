@@ -10,7 +10,9 @@ import { notFound } from "next/navigation";
 import { getLocations, getPackages } from "../../lib/data";
 import PackageHero from "../../components/pdp/PackageHero";
 import PromiseStrip from "../../components/pdp/PromiseStrip";
+import TabNavigation from "../../components/pdp/TabNavigation";
 import ExperienceSection from "../../components/pdp/ExperienceSection";
+import InclusionsGrid from "../../components/pdp/InclusionsGrid";
 import ItineraryCustomizer from "../../components/pdp/ItineraryCustomizer";
 import ConciergeCard from "../../components/pdp/ConciergeCard";
 import RecentlyViewed from "../../components/pdp/RecentlyViewed";
@@ -89,14 +91,21 @@ export default function PackageDetailPage({ params }) {
             {/* BRANDING STRIP */}
             <PromiseStrip />
 
-            {/* MAIN CONTENT GRID */}
-            <section className="py-32 container mx-auto px-6 md:px-12">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-start">
+            {/* TAB NAVIGATION */}
+            <TabNavigation />
 
+            {/* MAIN CONTENT WITH FLOATING SIDEBAR */}
+            <section className="py-16 md:py-24 container mx-auto px-6 md:px-12">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16">
                     {/* Left Column: Content (8 cols) */}
-                    <div className="lg:col-span-8 space-y-32">
+                    <div className="lg:col-span-8 space-y-16 md:space-y-24">
+                        {/* Experience Section */}
                         <ExperienceSection description={pkg.description} />
 
+                        {/* Inclusions Grid */}
+                        <InclusionsGrid />
+
+                        {/* Itinerary Customizer */}
                         <ItineraryCustomizer
                             itinerary={pkg.itinerary}
                             customizations={customizations}
@@ -106,14 +115,16 @@ export default function PackageDetailPage({ params }) {
                         />
                     </div>
 
-                    {/* Right Column: Sticky Sidebar (4 cols) */}
-                    <ConciergeCard
-                        pkgName={pkg.title}
-                        basePrice={pkg.price}
-                        duration={pkg.duration}
-                        customizations={customizations}
-                        upgradeCount={upgradeCount}
-                    />
+                    {/* Right Column: Floating Sticky Sidebar (4 cols) */}
+                    <div className="lg:col-span-4">
+                        <ConciergeCard
+                            pkgName={pkg.title}
+                            basePrice={pkg.price}
+                            duration={pkg.duration}
+                            customizations={customizations}
+                            upgradeCount={upgradeCount}
+                        />
+                    </div>
                 </div>
             </section>
 
