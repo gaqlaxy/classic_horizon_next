@@ -1,134 +1,92 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getReviews } from "../lib/data";
-import FeaturedTestimonial from "./testimonials/FeaturedTestimonial";
-import TestimonialGrid from "./testimonials/TestimonialGrid";
-import PaginationDots from "./testimonials/PaginationDots";
+import TestimonialSlide from "./testimonials/TestimonialSlide";
 
 export default function Testimonials() {
-  const containerRef = useRef();
-  const [currentFeaturedIdx, setCurrentFeaturedIdx] = useState(0);
-
   const reviews = getReviews();
-  // Get featured testimonial and remaining ones
-  const featuredReview = reviews[currentFeaturedIdx];
-  const otherReviews = reviews.filter((_, idx) => idx !== currentFeaturedIdx);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const containerRef = useRef();
 
-  useGSAP(() => {
-    // Fade in section title
-    gsap.from(".testi-title", {
-      opacity: 0,
-      y: 20,
-      duration: 0.8,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 80%",
-      },
-    });
-
-    // Featured card entrance
-    gsap.from(".featured-card-wrapper", {
-      opacity: 0,
-      x: -40,
-      duration: 1,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 75%",
-      },
-    });
-
-    // Grid cards staggered entrance
-    gsap.from(".testimonial-grid-item", {
-      opacity: 0,
-      y: 30,
-      stagger: 0.1,
-      duration: 0.8,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: ".testimonial-grid-wrapper",
-        start: "top 80%",
-      },
-    });
-
-    // Pagination dots
-    gsap.from(".pagination-wrapper", {
-      opacity: 0,
-      y: 10,
-      duration: 0.6,
-      ease: "power2.out",
-      delay: 0.3,
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 70%",
-      },
-    });
-  }, { scope: containerRef });
-
-  const handleFeaturedChange = (idx) => {
-    setCurrentFeaturedIdx(idx);
+  const nextSlide = () => {
+    setActiveIdx((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
   };
 
+  const prevSlide = () => {
+    setActiveIdx((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
+  };
+
+  // Auto-advance
+  useEffect(() => {
+    const timer = setInterval(nextSlide, 8000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section
-      ref={containerRef}
-      className="py-24 md:py-32 lg:py-40 bg-brand-white overflow-hidden"
-    >
-      <div className="container mx-auto px-6 md:px-12">
-        {/* Section Header */}
-        <div className="testi-title mb-16 md:mb-24">
-          <div className="flex items-center gap-4 mb-4">
-            <span className="h-px w-8 bg-brand-charcoal/20"></span>
-            <span className="text-brand-charcoal/40 text-xs font-bold uppercase tracking-[0.3em]">
-              Traveler Stories
-            </span>
+    <section ref={containerRef} className="relative h-screen min-h-[700px] bg-brand-forest overflow-hidden">
+      {/* Slides Container */}
+      <div className="relative w-full h-full">
+        {reviews.map((review, idx) => (
+          <TestimonialSlide
+            key={review.id}
+            review={review}
+            isActive={activeIdx === idx}
+          />
+        ))}
+      </div>
+
+      {/* Navigation Layer */}
+      <div className="absolute inset-x-0 bottom-20 z-30">
+        <div className="container mx-auto px-6 md:px-12 flex justify-between items-end">
+          {/* Slide Indicator */}
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center gap-4">
+              <span className="text-brand-white font-heading font-bold text-4xl">
+                {(activeIdx + 1).toString().padStart(2, '0')}
+              </span>
+              <div className="h-px w-12 bg-brand-accent/40"></div>
+              <span className="text-brand-white/20 font-heading font-bold text-2xl">
+                {reviews.length.toString().padStart(2, '0')}
+              </span>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-40 h-[2px] bg-brand-white/10 relative">
+              <div
+                className="absolute top-0 left-0 h-full bg-brand-accent transition-all duration-[8000ms] linear"
+                key={activeIdx}
+                style={{ width: '100%' }}
+              />
+            </div>
           </div>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-brand-forest leading-tight">
-            Voices from<br className="hidden md:block" /> Our Community
-          </h2>
+
+          {/* Nav Buttons */}
+          <div className="flex gap-4">
+            <button
+              onClick={prevSlide}
+              className="w-16 h-16 border border-brand-white/20 flex items-center justify-center text-brand-white hover:bg-brand-accent hover:border-brand-accent hover:text-brand-forest transition-all"
+            >
+              <svg className="w-6 h-6 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </button>
+            <button
+              onClick={nextSlide}
+              className="w-16 h-16 border border-brand-white/20 flex items-center justify-center text-brand-white hover:bg-brand-accent hover:border-brand-accent hover:text-brand-forest transition-all"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </button>
+          </div>
         </div>
+      </div>
 
-        {/* Featured + Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 mb-12">
-          {/* Featured Testimonial - Larger on left */}
-          <div className="featured-card-wrapper lg:col-span-1">
-            <FeaturedTestimonial review={featuredReview} />
-          </div>
-
-          {/* Other Testimonials - Grid on right */}
-          <div className="testimonial-grid-wrapper lg:col-span-2">
-            <TestimonialGrid
-              reviews={otherReviews}
-              className="[&>div]:testimonial-grid-item"
-            />
-          </div>
-        </div>
-
-        {/* Pagination Dots */}
-        {reviews.length > 1 && (
-          <div className="pagination-wrapper flex justify-center md:justify-start">
-            <PaginationDots
-              total={reviews.length}
-              current={currentFeaturedIdx}
-              onChange={handleFeaturedChange}
-              className="mt-8"
-            />
-          </div>
-        )}
-
-        {/* Secondary CTA */}
-        <div className="mt-16 md:mt-20 text-center md:text-left">
-          <a
-            href="#"
-            className="inline-flex items-center gap-3 text-brand-accent font-bold text-sm uppercase tracking-widest hover:gap-4 transition-all duration-300"
-          >
-            Read All {reviews.length} Reviews
-            <span>-&gt;</span>
-          </a>
+      {/* Side Label */}
+      <div className="absolute left-10 top-1/2 -translate-y-1/2 hidden xl:block z-30">
+        <div className="vertical-text text-[10px] font-bold uppercase tracking-[0.6em] text-brand-white/10 whitespace-nowrap">
+          The Classic Horizon Guest Register — 2026
         </div>
       </div>
     </section>
