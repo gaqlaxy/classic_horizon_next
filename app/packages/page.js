@@ -16,7 +16,6 @@ export default function PackagesPage() {
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const containerRef = useRef();
 
-  // Load recently viewed from localStorage
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("recentlyViewed") || "[]");
     setRecentlyViewed(stored);
@@ -24,18 +23,22 @@ export default function PackagesPage() {
 
   const locations = getLocations();
   const allPackages = getPackages();
-  const regions = ["All", ...new Set(locations.map((l) => l.region))];
+  const regions = ["All Regions", ...new Set(locations.map((l) => l.region))];
+  const regionCount = new Set(locations.map((l) => l.region)).size;
+  const avgRating =
+    allPackages.length > 0
+      ? allPackages.reduce((sum, pkg) => sum + (pkg.rating || 0), 0) /
+        allPackages.length
+      : 0;
 
-  // Filtering logic
   let packages =
     filter === "all"
       ? [...allPackages]
       : allPackages.filter((pkg) => {
-        const location = locations.find((l) => l.id === pkg.location);
-        return location?.region.toLowerCase() === filter.toLowerCase();
-      });
+          const location = locations.find((l) => l.id === pkg.location);
+          return location?.region.toLowerCase() === filter.toLowerCase();
+        });
 
-  // Sorting logic
   if (sortBy === "Price: Low to High") {
     packages.sort((a, b) => a.price - b.price);
   } else if (sortBy === "Price: High to Low") {
@@ -44,7 +47,7 @@ export default function PackagesPage() {
     packages.sort((a, b) => b.rating - a.rating);
   } else if (sortBy === "Duration") {
     packages.sort((a, b) => {
-      const getDays = (s) => parseInt(s.split(" ")[0]);
+      const getDays = (s) => parseInt(s.split(" ")[0], 10);
       return getDays(b.duration) - getDays(a.duration);
     });
   }
@@ -82,52 +85,124 @@ export default function PackagesPage() {
   }, [filter, sortBy, view]);
 
   return (
-    <div ref={containerRef} className="bg-brand-white min-h-screen">
-      {/* Page Hero Banner */}
-      <section className="relative h-105 pt-32 flex flex-col justify-end bg-brand-charcoal overflow-hidden group">
-        <div className="absolute inset-0 opacity-40">
+    <main ref={containerRef} className="bg-brand-white min-h-screen">
+      <section className="relative overflow-hidden bg-brand-forest pt-28 pb-12">
+        <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=2000"
-            alt="Collections Hero"
-            className="w-full h-full object-cover transition-transform duration-10000 group-hover:scale-110"
+            src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2200"
+            alt=""
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-brand-charcoal to-transparent"></div>
         </div>
-        <div className="container mx-auto px-6 md:px-12 relative z-10 pb-16">
-          <div className="reveal flex items-center gap-2 text-brand-accent text-[10px] font-bold uppercase tracking-widest mb-4">
-            <Link href="/" className="hover:text-white transition-colors">
-              Home
-            </Link>
-            <span className="opacity-30">/</span>
-            <span className="text-white">Collections</span>
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-forest/85 via-brand-forest/55 to-brand-forest/80"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.15),transparent_55%)]"></div>
+
+        <div className="container mx-auto px-6 md:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="reveal flex items-center gap-2 text-brand-accent text-[10px] font-bold uppercase tracking-widest mb-6">
+              <Link href="/" className="hover:text-white transition-colors">
+                Home
+              </Link>
+              <span className="opacity-30">/</span>
+              <span className="text-white">Packages</span>
+            </div>
+            <span className="reveal text-brand-accent font-bold uppercase tracking-[0.4em] text-xs mb-4 block">
+              Signature Collections
+            </span>
+            <h1 className="reveal text-5xl md:text-7xl font-heading font-bold text-white mb-6 tracking-tight leading-[0.95]">
+              Journeys With <br /> Intent.
+            </h1>
+            <p className="reveal text-white/80 text-lg md:text-xl max-w-xl leading-relaxed">
+              Curated routes, immersive stays, and precision pacing. Explore by
+              region or compare the journeys that match your travel tempo.
+            </p>
+
+            <div className="reveal mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <Link
+                href="/booking"
+                className="px-10 py-4 bg-brand-forest text-brand-white font-bold uppercase tracking-widest text-xs hover:bg-brand-charcoal transition-all"
+              >
+                Plan My Journey
+              </Link>
+              <Link
+                href="/destinations"
+                className="px-10 py-4 border border-white/30 text-white font-bold uppercase tracking-widest text-xs hover:bg-white hover:text-brand-forest transition-all"
+              >
+                Browse Destinations
+              </Link>
+            </div>
+
+            <div className="reveal mt-10 grid grid-cols-3 gap-4 max-w-lg">
+              <div className="border border-white/20 bg-white/10 px-4 py-4 backdrop-blur-sm">
+                <span className="text-brand-accent text-[9px] font-bold uppercase tracking-[0.4em] block mb-1">
+                  Journeys
+                </span>
+                <p className="text-2xl font-heading font-bold text-white">
+                  {allPackages.length.toString().padStart(2, "0")}
+                </p>
+              </div>
+              <div className="border border-white/20 bg-white/10 px-4 py-4 backdrop-blur-sm">
+                <span className="text-brand-accent text-[9px] font-bold uppercase tracking-[0.4em] block mb-1">
+                  Regions
+                </span>
+                <p className="text-2xl font-heading font-bold text-white">
+                  {regionCount.toString().padStart(2, "0")}
+                </p>
+              </div>
+              <div className="border border-white/20 bg-white/10 px-4 py-4 backdrop-blur-sm">
+                <span className="text-brand-accent text-[9px] font-bold uppercase tracking-[0.4em] block mb-1">
+                  Avg Rating
+                </span>
+                <p className="text-2xl font-heading font-bold text-white">
+                  {avgRating.toFixed(1)}
+                </p>
+              </div>
+            </div>
           </div>
-          <h1 className="reveal text-5xl md:text-7xl font-heading font-bold text-white mb-6 tracking-tight leading-none">
-            Our Collections
-          </h1>
-          <p className="reveal text-white/60 text-lg max-w-2xl leading-relaxed">
-            From the peaks of the Himalayas to the sunsets of Santorini,
-            discover journeys precisely tailored to your soul.
-          </p>
+
+          <div className="relative">
+            <div className="reveal aspect-[4/5] overflow-hidden border border-white/20 shadow-2xl">
+              <img
+                src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1600"
+                alt="Curated journey"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="reveal absolute -bottom-8 -left-8 bg-brand-charcoal text-brand-white px-6 py-5 border border-white/10 shadow-lg">
+              <p className="text-[9px] font-bold uppercase tracking-[0.4em] text-brand-accent mb-2">
+                Signature
+              </p>
+              <p className="text-lg font-heading font-bold leading-tight">
+                Bespoke Itineraries
+              </p>
+              <p className="text-[11px] text-white/70 mt-2">
+                Designed by destination specialists
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Controls Bar */}
-      <section className="sticky top-20 z-40 bg-white/80 backdrop-blur-md border-b border-brand-charcoal/5">
-        <div className="container mx-auto px-6 md:px-12 py-6 flex flex-col lg:flex-row justify-between items-center gap-8">
-          {/* Region Filters */}
+      <section className=" top-20 z-40 bg-white/90 backdrop-blur-md border-y border-brand-charcoal/5">
+        <div className="container mx-auto px-6 md:px-12 py-4 flex flex-col lg:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-4 overflow-x-auto pb-2 lg:pb-0 no-scrollbar w-full lg:w-auto">
-            {regions.map((region) => (
-              <button
-                key={region}
-                onClick={() => setFilter(region.toLowerCase())}
-                className={`reveal px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border whitespace-nowrap ${filter === region.toLowerCase()
-                  ? "bg-brand-forest text-brand-white border-brand-forest shadow-lg"
-                  : "bg-white text-brand-charcoal border-brand-charcoal/10 hover:border-brand-forest"
+            {regions.map((region) => {
+              const regionKey =
+                region === "All Regions" ? "all" : region.toLowerCase();
+              return (
+                <button
+                  key={region}
+                  onClick={() => setFilter(regionKey)}
+                  className={`reveal px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border whitespace-nowrap ${
+                    filter === regionKey
+                      ? "bg-brand-forest text-brand-white border-brand-forest shadow-lg"
+                      : "bg-white text-brand-charcoal border-brand-charcoal/10 hover:border-brand-forest"
                   }`}
-              >
-                {region}
-              </button>
-            ))}
+                >
+                  {region}
+                </button>
+              );
+            })}
           </div>
 
           <div className="reveal flex items-center gap-8 w-full lg:w-auto justify-between lg:justify-end">
@@ -151,7 +226,11 @@ export default function PackagesPage() {
             <div className="flex items-center gap-2 border border-brand-charcoal/10 p-1">
               <button
                 onClick={() => setView("grid")}
-                className={`p-2 transition-colors ${view === "grid" ? "bg-brand-forest text-white" : "text-brand-charcoal/30 hover:text-brand-forest"}`}
+                className={`p-2 transition-colors ${
+                  view === "grid"
+                    ? "bg-brand-forest text-white"
+                    : "text-brand-charcoal/30 hover:text-brand-forest"
+                }`}
               >
                 <div className="grid grid-cols-2 gap-0.5 w-3 h-3">
                   <div className="bg-current"></div>
@@ -162,7 +241,11 @@ export default function PackagesPage() {
               </button>
               <button
                 onClick={() => setView("list")}
-                className={`p-2 transition-colors ${view === "list" ? "bg-brand-forest text-white" : "text-brand-charcoal/30 hover:text-brand-forest"}`}
+                className={`p-2 transition-colors ${
+                  view === "list"
+                    ? "bg-brand-forest text-white"
+                    : "text-brand-charcoal/30 hover:text-brand-forest"
+                }`}
               >
                 <div className="flex flex-col gap-0.5 w-3 h-3">
                   <div className="bg-current h-0.5 w-full"></div>
@@ -179,13 +262,12 @@ export default function PackagesPage() {
         </div>
       </section>
 
-      {/* Package Grid */}
-      <section className="py-20 container mx-auto px-6 md:px-12">
+      <section className="pt-12 pb-20 container mx-auto px-6 md:px-12">
         <div
           className={
             view === "grid"
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
-              : "flex flex-col gap-8"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
+              : "flex flex-col gap-10"
           }
         >
           {packages.map((pkg, idx) => {
@@ -193,28 +275,38 @@ export default function PackagesPage() {
             return (
               <div
                 key={pkg.id}
-                className={`pkg-grid-item group ${isFeatured ? "md:col-span-2" : ""}`}
+                className={`pkg-grid-item group ${
+                  isFeatured ? "md:col-span-2" : ""
+                }`}
               >
                 <Link href={`/packages/${pkg.slug}`}>
                   <div
-                    className={`relative overflow-hidden bg-brand-charcoal ${view === "grid" ? (isFeatured ? "aspect-16/7" : "aspect-4/5") : "flex flex-col md:flex-row h-auto md:h-64"}`}
+                    className={`relative overflow-hidden bg-brand-charcoal ${
+                      view === "grid"
+                        ? isFeatured
+                          ? "aspect-16/7"
+                          : "aspect-4/5"
+                        : "flex flex-col md:flex-row h-auto md:h-72"
+                    }`}
                   >
                     <img
                       src={pkg.image}
                       alt={pkg.title}
-                      className={`${view === "grid" ? "w-full h-full" : "w-full md:w-96 h-64 md:h-full"} object-cover transition-transform duration-700 group-hover:scale-105 brightness-90 group-hover:brightness-100`}
+                      className={`${
+                        view === "grid"
+                          ? "w-full h-full"
+                          : "w-full md:w-[420px] h-72 md:h-full"
+                      } object-cover transition-transform duration-700 group-hover:scale-105 brightness-90 group-hover:brightness-100`}
                     />
 
-                    {/* Card Content Overlay */}
-                    <div
-                      className={`absolute inset-0 bg-brand-forest/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center`}
-                    >
-                      <span className="px-6 py-3 bg-white text-brand-forest text-[10px] font-bold uppercase tracking-widest scale-90 group-hover:scale-100 transition-transform duration-500">
-                        View Trip Details -
-                      </span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end">
+                      <div className="p-6 md:p-8">
+                        <span className="inline-flex items-center px-4 py-2 bg-white text-brand-forest text-[10px] font-bold uppercase tracking-widest scale-95 group-hover:scale-100 transition-transform duration-500">
+                          View Trip Details
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Badges */}
                     <div className="absolute top-6 left-6 flex flex-col gap-2 pointer-events-none">
                       <span className="bg-white/95 text-brand-forest text-[10px] font-bold uppercase tracking-[0.2em] px-4 py-1.5 shadow-sm">
                         {pkg.duration}
@@ -228,36 +320,40 @@ export default function PackagesPage() {
 
                     {view === "list" && (
                       <div className="flex-1 p-10 flex flex-col justify-center bg-white border border-brand-charcoal/5 border-l-0">
-                        <div className="flex justify-between items-start mb-4">
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6 mb-4">
                           <div>
-                            <span className="text-brand-accent text-[8px] font-bold uppercase tracking-[0.3em] mb-1 block">
+                            <span className="text-brand-accent text-[8px] font-bold uppercase tracking-[0.3em] mb-2 block">
                               Rating{" "}
-                              <span className="text-brand-forest opacity-50">
-                                ★ {pkg.rating}
+                              <span className="text-brand-forest opacity-60">
+                                {pkg.rating}
                               </span>
                             </span>
-                            <h3 className="text-2xl md:text-3xl font-heading font-bold text-brand-forest">
+                            <h3 className="text-2xl md:text-3xl font-heading font-bold text-brand-forest mb-2">
                               {pkg.title}
                             </h3>
+                            <p className="text-brand-charcoal/40 text-[10px] font-bold uppercase tracking-[0.2em]">
+                              {locations.find((l) => l.id === pkg.location)?.name}{" "}
+                              -{" "}
+                              {
+                                locations.find((l) => l.id === pkg.location)
+                                  ?.country
+                              }
+                            </p>
                           </div>
                           <div className="text-right">
                             <span className="text-sm text-brand-charcoal/40 block font-bold uppercase tracking-tighter">
                               From
                             </span>
                             <span className="text-3xl font-heading font-bold text-brand-forest">
-                              ₹{pkg.price.toLocaleString()}
+                              INR {pkg.price.toLocaleString()}
                             </span>
                           </div>
                         </div>
                         <p className="text-brand-charcoal/60 text-sm line-clamp-2 max-w-xl mb-6">
                           {pkg.description}
                         </p>
-                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-charcoal/40">
-                          {locations.find((l) => l.id === pkg.location)?.name} -{" "}
-                          {
-                            locations.find((l) => l.id === pkg.location)
-                              ?.country
-                          }
+                        <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-charcoal/40">
+                          Includes guided experiences and curated stays
                         </span>
                       </div>
                     )}
@@ -268,7 +364,7 @@ export default function PackagesPage() {
                       <div>
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-[10px] text-brand-accent font-bold">
-                            ★ {pkg.rating}
+                            {pkg.rating}
                           </span>
                           <span className="text-[8px] text-brand-charcoal/30 font-bold uppercase tracking-widest">
                             {
@@ -290,7 +386,7 @@ export default function PackagesPage() {
                       </div>
                       <div className="text-right">
                         <span className="text-2xl font-bold font-heading text-brand-forest leading-none block">
-                          ₹{pkg.price.toLocaleString()}
+                          INR {pkg.price.toLocaleString()}
                         </span>
                         <span className="text-[8px] uppercase tracking-widest text-brand-charcoal/30 font-bold mt-1 block">
                           Per Person
@@ -307,7 +403,7 @@ export default function PackagesPage() {
         {packages.length === 0 && (
           <div className="text-center py-40 bg-brand-charcoal/5">
             <p className="text-brand-charcoal/40 font-heading text-3xl italic mb-8">
-              No matching adventures found...
+              No matching adventures found.
             </p>
             <button
               onClick={() => {
@@ -322,22 +418,13 @@ export default function PackagesPage() {
         )}
       </section>
 
-      {/* Promise Strip */}
       <section className="bg-brand-charcoal text-brand-white py-16 border-y-2 border-brand-accent">
         <div className="container mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-12">
           {[
-            {
-              icon: "✓",
-              title: "Best Price",
-              desc: "Find it cheaper? We'll match.",
-            },
-            { icon: "↺", title: "Flex Book", desc: "Cancel up to 48h before." },
-            { icon: "🛡", title: "Protected", desc: "Fully insured bookings." },
-            {
-              icon: "✈",
-              title: "Expert Care",
-              desc: "Crafted by specialists.",
-            },
+            { icon: "✓", title: "Best Price", desc: "Find it cheaper? We match." },
+            { icon: "->", title: "Flex Book", desc: "Cancel up to 48h before." },
+            { icon: "Shield", title: "Protected", desc: "Fully insured bookings." },
+            { icon: "Air", title: "Expert Care", desc: "Crafted by specialists." },
           ].map((item, i) => (
             <div
               key={i}
@@ -355,7 +442,6 @@ export default function PackagesPage() {
         </div>
       </section>
 
-      {/* Custom Quote CTA */}
       <section className="py-32 container mx-auto px-6 md:px-12">
         <div className="border-[3px] border-dashed border-brand-forest/20 p-12 md:p-24 flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1 text-center lg:text-left">
@@ -363,16 +449,16 @@ export default function PackagesPage() {
               Uniquely Yours.
             </h2>
             <p className="text-brand-charcoal/60 text-lg mb-10 leading-relaxed max-w-2xl">
-              Our travel curators can design a completely bespoke itinerary -
-              tailored to your exact dates, budget, and travel style. No generic
-              packages. Just your journey.
+              Our travel curators can design a bespoke itinerary tailored to
+              your exact dates, budget, and travel style. No generic packages.
+              Just your journey.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-8">
               <Link
                 href="/booking"
                 className="px-12 py-5 bg-brand-forest text-brand-white font-bold uppercase tracking-widest text-xs hover:bg-brand-charcoal transition-all"
               >
-                Request Custom Itinerary -
+                Request Custom Itinerary
               </Link>
               <span className="text-xs text-brand-charcoal/40 font-bold uppercase">
                 or call{" "}
@@ -390,7 +476,6 @@ export default function PackagesPage() {
         </div>
       </section>
 
-      {/* Recently Viewed */}
       {recentlyViewed.length > 0 && (
         <section className="bg-brand-charcoal py-24 border-t border-brand-accent/30 overflow-hidden">
           <div className="container mx-auto px-6 md:px-12">
@@ -434,7 +519,7 @@ export default function PackagesPage() {
                       {pkg.title}
                     </h4>
                     <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">
-                      ₹{pkg.price.toLocaleString()} - {pkg.duration}
+                      INR {pkg.price.toLocaleString()} - {pkg.duration}
                     </p>
                   </Link>
                 );
@@ -443,6 +528,6 @@ export default function PackagesPage() {
           </div>
         </section>
       )}
-    </div>
+    </main>
   );
 }
