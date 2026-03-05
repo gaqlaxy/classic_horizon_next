@@ -36,7 +36,7 @@ export default function Hero() {
         id: pkg.id,
         slug: pkg.slug,
         name: pkg.title,
-        subtitle: `${pkg.duration} - From $${pkg.price}`,
+        subtitle: `${pkg.duration} - From ₹${pkg.price}`,
         locationId: pkg.location,
     }));
 

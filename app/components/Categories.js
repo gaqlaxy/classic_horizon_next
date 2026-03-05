@@ -41,7 +41,7 @@ export default function Categories() {
                     {getCategories().map((category) => (
                         <Link
                             key={category.id}
-                            href={`/packages?category=${category.id}`}
+                            href={`/packages/${category.id}`}
                             className="cat-card group relative aspect-[3/4] overflow-hidden"
                         >
                             <img

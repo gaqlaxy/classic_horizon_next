@@ -31,9 +31,9 @@ export default function PackagesPage() {
     filter === "all"
       ? [...allPackages]
       : allPackages.filter((pkg) => {
-          const location = locations.find((l) => l.id === pkg.location);
-          return location?.region.toLowerCase() === filter.toLowerCase();
-        });
+        const location = locations.find((l) => l.id === pkg.location);
+        return location?.region.toLowerCase() === filter.toLowerCase();
+      });
 
   // Sorting logic
   if (sortBy === "Price: Low to High") {
@@ -120,11 +120,10 @@ export default function PackagesPage() {
               <button
                 key={region}
                 onClick={() => setFilter(region.toLowerCase())}
-                className={`reveal px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border whitespace-nowrap ${
-                  filter === region.toLowerCase()
-                    ? "bg-brand-forest text-brand-white border-brand-forest shadow-lg"
-                    : "bg-white text-brand-charcoal border-brand-charcoal/10 hover:border-brand-forest"
-                }`}
+                className={`reveal px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-300 border whitespace-nowrap ${filter === region.toLowerCase()
+                  ? "bg-brand-forest text-brand-white border-brand-forest shadow-lg"
+                  : "bg-white text-brand-charcoal border-brand-charcoal/10 hover:border-brand-forest"
+                  }`}
               >
                 {region}
               </button>
@@ -246,7 +245,7 @@ export default function PackagesPage() {
                               From
                             </span>
                             <span className="text-3xl font-heading font-bold text-brand-forest">
-                              ${pkg.price}
+                              ₹{pkg.price.toLocaleString()}
                             </span>
                           </div>
                         </div>
@@ -291,7 +290,7 @@ export default function PackagesPage() {
                       </div>
                       <div className="text-right">
                         <span className="text-2xl font-bold font-heading text-brand-forest leading-none block">
-                          ${pkg.price}
+                          ₹{pkg.price.toLocaleString()}
                         </span>
                         <span className="text-[8px] uppercase tracking-widest text-brand-charcoal/30 font-bold mt-1 block">
                           Per Person
@@ -435,7 +434,7 @@ export default function PackagesPage() {
                       {pkg.title}
                     </h4>
                     <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">
-                      ${pkg.price} - {pkg.duration}
+                      ₹{pkg.price.toLocaleString()} - {pkg.duration}
                     </p>
                   </Link>
                 );

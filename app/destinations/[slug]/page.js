@@ -64,7 +64,7 @@ export default function DestinationDetailPage({ params }) {
                                                 <div className="absolute top-0 right-0 p-8">
                                                     <div className="bg-brand-white/90 backdrop-blur-sm px-6 py-4 flex flex-col items-end">
                                                         <span className="text-brand-charcoal/40 text-[8px] font-bold uppercase tracking-widest leading-none mb-1">From</span>
-                                                        <span className="text-brand-forest text-xl font-heading font-bold leading-none">${pkg.price}</span>
+                                                        <span className="text-brand-forest text-xl font-heading font-bold leading-none">₹{pkg.price.toLocaleString()}</span>
                                                     </div>
                                                 </div>
 

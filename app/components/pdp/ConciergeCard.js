@@ -13,16 +13,14 @@ export default function ConciergeCard({
   return (
     <div className="sticky top-6 h-fit">
       <div
-        className={`bg-brand-white border border-brand-charcoal/10 p-8 md:p-10 shadow-xl relative overflow-hidden group transition-all duration-500 rounded-lg ${
-          hasUpgrades ? "border-brand-accent/40 shadow-brand-accent/10" : ""
-        }`}
+        className={`bg-brand-white border border-brand-charcoal/10 p-8 md:p-10 shadow-xl relative overflow-hidden group transition-all duration-500 rounded-lg ${hasUpgrades ? "border-brand-accent/40 shadow-brand-accent/10" : ""
+          }`}
       >
         <div
-          className={`absolute top-0 right-0 w-40 h-40 rounded-full -mr-20 -mt-20 blur-3xl transition-colors duration-700 ${
-            hasUpgrades
+          className={`absolute top-0 right-0 w-40 h-40 rounded-full -mr-20 -mt-20 blur-3xl transition-colors duration-700 ${hasUpgrades
               ? "bg-brand-accent/20"
               : "bg-brand-accent/5 group-hover:bg-brand-accent/10"
-          }`}
+            }`}
         ></div>
 
         <div className="relative z-10">
@@ -32,11 +30,10 @@ export default function ConciergeCard({
             </span>
             <div className="flex items-center justify-center gap-2">
               <span
-                className={`text-6xl md:text-7xl font-heading font-bold transition-all duration-500 ${
-                  hasUpgrades ? "text-brand-accent" : "text-brand-forest"
-                } tracking-tighter`}
+                className={`text-6xl md:text-7xl font-heading font-bold transition-all duration-500 ${hasUpgrades ? "text-brand-accent" : "text-brand-forest"
+                  } tracking-tighter`}
               >
-                ${totalPrice.toLocaleString()}
+                ₹{totalPrice.toLocaleString()}
               </span>
             </div>
             <span className="block text-[9px] uppercase tracking-widest text-brand-forest/50 font-bold mt-3 italic">
@@ -59,7 +56,7 @@ export default function ConciergeCard({
                       className="flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-brand-forest/70"
                     >
                       <span>Day {parseInt(day) + 1} Upgrade</span>
-                      <span>+$250</span>
+                      <span>+₹250</span>
                     </div>
                   );
                 })}
@@ -93,11 +90,10 @@ export default function ConciergeCard({
           <div className="space-y-3">
             <Link
               href={`/booking?package=${encodeURIComponent(pkgName)}`}
-              className={`group flex items-center justify-between w-full p-5 text-[11px] font-bold uppercase tracking-[0.3em] transition-all shadow-lg hover:shadow-xl rounded-lg ${
-                hasUpgrades
+              className={`group flex items-center justify-between w-full p-5 text-[11px] font-bold uppercase tracking-[0.3em] transition-all shadow-lg hover:shadow-xl rounded-lg ${hasUpgrades
                   ? "bg-brand-accent text-brand-forest hover:bg-brand-accent/90"
                   : "bg-brand-forest text-brand-white hover:bg-brand-charcoal"
-              }`}
+                }`}
             >
               {hasUpgrades ? "Request Bespoke Quote" : "Begin Reservation"}
               <span className="group-hover:translate-x-1 transition-transform duration-300">

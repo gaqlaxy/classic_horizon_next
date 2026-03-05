@@ -7,7 +7,7 @@ import { useRef, use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 
 // Data and Components
-import { getLocations, getPackages } from "../../lib/data";
+import { getCategories, getLocations, getPackages } from "../../lib/data";
 import PackageHero from "../../components/pdp/PackageHero";
 import PromiseStrip from "../../components/pdp/PromiseStrip";
 import TabNavigation from "../../components/pdp/TabNavigation";
@@ -17,6 +17,7 @@ import ItineraryCustomizer from "../../components/pdp/ItineraryCustomizer";
 import ConciergeCard from "../../components/pdp/ConciergeCard";
 import RecentlyViewed from "../../components/pdp/RecentlyViewed";
 import DiscoveryCTA from "../../components/pdp/DiscoveryCTA";
+import CategoryListing from "../../components/CategoryListing";
 
 // Register ScrollTrigger
 if (typeof window !== "undefined") {
@@ -27,6 +28,10 @@ export default function PackageDetailPage({ params }) {
     const { slug } = use(params);
     const packages = getPackages();
     const locations = getLocations();
+    const categories = getCategories();
+
+    // Check if this is a category page OR a package page
+    const category = categories.find(c => c.id === slug);
     const pkg = packages.find(p => p.slug === slug);
     const containerRef = useRef();
 
@@ -34,6 +39,17 @@ export default function PackageDetailPage({ params }) {
     const [recentlyViewed, setRecentlyViewed] = useState([]);
     const [customizations, setCustomizations] = useState({});
     const [isCustomizing, setIsCustomizing] = useState(false);
+
+    // If it's a category page, render the CategoryListing
+    if (category) {
+        const categoryPackages = packages.filter(p => p.category === slug);
+        return (
+            <div className="bg-brand-white min-h-screen pt-32">
+                <CategoryListing packages={categoryPackages} categoryName={category.name} />
+                <DiscoveryCTA />
+            </div>
+        );
+    }
 
     if (!pkg) {
         notFound();
