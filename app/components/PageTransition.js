@@ -9,8 +9,16 @@ export default function PageTransition({ children }) {
     const overlayRef = useRef(null);
     const contentRef = useRef(null);
     const [displayChildren, setDisplayChildren] = useState(children);
+    const isInitialMount = useRef(true);
 
     useEffect(() => {
+        // Skip animation on initial mount
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            setDisplayChildren(children);
+            return;
+        }
+
         const tl = gsap.timeline();
 
         // 1. Entrance: Cover the screen

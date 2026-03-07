@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PageTransition from "./components/PageTransition";
+// import Preloader from "./components/Preloader";
 
 const outfit = Outfit({
   variable: "--font-heading",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${outfit.variable} ${inter.variable} antialiased`}>
+        {/* <Preloader /> */}
         <Navbar />
         <PageTransition>
           {children}
