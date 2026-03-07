@@ -24,7 +24,10 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <section ref={containerRef} className="relative h-screen min-h-[700px] bg-brand-forest overflow-hidden">
+    <section ref={containerRef} className="relative h-screen min-h-[700px] bg-brand-forest overflow-hidden animate-reveal-up">
+      {/* Background Subtle Pattern/Overlay */}
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none"></div>
+
       {/* Slides Container */}
       <div className="relative w-full h-full">
         {reviews.map((review, idx) => (

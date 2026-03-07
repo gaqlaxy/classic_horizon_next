@@ -155,15 +155,21 @@ export default function Hero() {
     return (
         <div ref={containerRef} className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
             {/* Immersive Background */}
+            {/* Replace the background with image in public folder  */}
             <div
                 ref={imgRef}
                 className="absolute inset-0 bg-cover bg-center z-0"
-                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=2543')" }}
+                style={{ backgroundImage: "url('/HeroBg.jpeg')" }}
             ></div>
+            {/* <div
+                ref={imgRef}
+                className="absolute inset-0 bg-cover bg-center z-0"
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=2543')" }}
+            ></div> */}
 
             {/* Content Overlay */}
             <div className="relative z-10 text-center px-6">
-                <h1 ref={titleRef} className="text-5xl md:text-8xl text-brand-white font-heading font-bold mb-6 tracking-tight leading-[1.1]">
+                <h1 ref={titleRef} className="text-5xl md:text-8xl text-brand-white font-heading font-bold mb-6 tracking-tight leading-[1.1] drop-shadow-md">
                     <div className="reveal-text">
                         <span className="reveal-span">Your Next</span>
                     </div>
@@ -172,21 +178,22 @@ export default function Hero() {
                     </div>
                 </h1>
 
-                <p ref={subRef} className="text-brand-white/80 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium">
+                <p ref={subRef} className="text-brand-white/90 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-medium drop-shadow-sm">
                     Search from 120+ handpicked destinations across 6 continents. Elevate your travel story with Classic Horizon.
                 </p>
 
                 {/* Hero Search Bar */}
                 <div
                     ref={searchRef}
-                    className="bg-white/95 backdrop-blur-sm p-2 md:p-3 flex flex-col md:flex-row shadow-2xl max-w-4xl mx-auto border border-white/20"
+                    className="bg-white/95 backdrop-blur-sm p-2 md:p-3 flex flex-col md:flex-row shadow-2xl max-w-4xl mx-auto border border-white/20 rounded-sm"
                 >
                     {/* Where To - with dropdown */}
-                    <div className="relative flex-1 border-b md:border-b-0 md:border-r border-brand-charcoal/10 p-4 text-left" ref={dropdownRef}>
+                    <div className="relative flex-1 border-b md:border-b-0 md:border-r border-brand-charcoal/10 p-4 text-left group focus-within:bg-brand-forest/5 transition-colors" ref={dropdownRef}>
                         <label className="block text-[10px] uppercase tracking-widest text-brand-charcoal/50 font-bold mb-1">Where To?</label>
                         <input
                             type="text"
                             placeholder="Explore destinations..."
+                            aria-label="Search destinations"
                             className="bg-transparent w-full text-sm font-medium focus:outline-none placeholder:text-brand-charcoal/30"
                             value={searchTerm}
                             onChange={(e) => {
@@ -293,13 +300,13 @@ export default function Hero() {
                         )}
                     </div>
 
-                    <div className="flex-1 border-b md:border-b-0 md:border-r border-brand-charcoal/10 p-4 text-left">
+                    <div className="flex-1 border-b md:border-b-0 md:border-r border-brand-charcoal/10 p-4 text-left focus-within:bg-brand-forest/5 transition-colors">
                         <label className="block text-[10px] uppercase tracking-widest text-brand-charcoal/50 font-bold mb-1">Departure</label>
-                        <input type="date" className="bg-transparent w-full text-sm font-medium focus:outline-none" />
+                        <input type="date" aria-label="Departure date" className="bg-transparent w-full text-sm font-medium focus:outline-none" />
                     </div>
-                    <div className="flex-1 p-4 text-left">
+                    <div className="flex-1 p-4 text-left focus-within:bg-brand-forest/5 transition-colors">
                         <label className="block text-[10px] uppercase tracking-widest text-brand-charcoal/50 font-bold mb-1">Travelers</label>
-                        <select className="bg-transparent w-full text-sm font-medium focus:outline-none appearance-none">
+                        <select aria-label="Number of travelers" className="bg-transparent w-full text-sm font-medium focus:outline-none appearance-none cursor-pointer">
                             <option>2 Adults, 1 Room</option>
                             <option>1 Adult, 1 Room</option>
                             <option>2 Adults, 2 Rooms</option>
@@ -307,7 +314,7 @@ export default function Hero() {
                     </div>
                     <button
                         onClick={handleSearch}
-                        className="bg-brand-forest text-brand-white px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-brand-charcoal transition-all"
+                        className="bg-brand-forest text-brand-white px-10 py-4 font-bold uppercase tracking-widest text-sm hover:bg-brand-charcoal hover:scale-[1.02] active:scale-[0.98] transition-all"
                     >
                         Search
                     </button>

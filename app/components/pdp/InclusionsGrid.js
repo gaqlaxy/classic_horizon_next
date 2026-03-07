@@ -7,7 +7,7 @@ export default function InclusionsGrid() {
   ];
 
   return (
-    <div>
+    <div id="details" className="scroll-mt-32">
       <h3 className="section-title text-brand-charcoal/30 text-xs font-bold uppercase tracking-[0.5em] mb-8 flex items-center gap-4">
         <span className="h-px w-8 bg-brand-charcoal/20"></span>
         What's Included

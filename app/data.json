@@ -266,6 +266,15 @@
             "text": "The Maldives package was beyond our wildest expectations. Pure luxury at an honest price.",
             "trip": "Maldives Honeymoon - Jan 2026",
             "avatar": ""
+        },
+        {
+            "id": "r4",
+            "author": "Lisa & Kumar",
+            "initials": "LK",
+            "rating": 5,
+            "text": "The Bali package was beyond our wildest expectations. Pure luxury at an honest price.",
+            "trip": "Bali & Lombok Odyssey - March 2026",
+            "avatar": ""
         }
     ]
 }

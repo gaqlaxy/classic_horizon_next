@@ -49,9 +49,13 @@ export default function Navbar() {
         >
             <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
                 {/* Logo */}
-                <Link href="/" className="text-2xl font-heading font-bold tracking-tighter text-brand-forest">
-                    CLASSIC<span className="text-brand-accent">HORIZON</span>
+                {/* Add a PNG Image from public  */}
+                <Link href="/">
+                    <img src="/logobg.png" alt="Logo" className="w-24 h-24" />
                 </Link>
+                {/* <Link href="/" className="text-2xl font-heading font-bold tracking-tight text-brand-forest whitespace-nowrap">
+                    CLASSIC<span className="text-brand-accent">HORIZON</span>
+                </Link> */}
 
                 {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-10">
@@ -64,14 +68,15 @@ export default function Navbar() {
                 <div className="flex items-center gap-6">
                     <Link
                         href="/booking"
-                        className="hidden sm:block px-6 py-2.5 bg-brand-forest text-brand-white text-xs font-bold uppercase tracking-widest hover:bg-brand-charcoal transition-all duration-300"
+                        className="hidden sm:block px-6 py-2.5 bg-brand-forest text-brand-white text-xs font-bold uppercase tracking-widest hover:bg-brand-charcoal hover:scale-105 hover:shadow-lg transition-all duration-300"
                     >
                         Travel Enquiry
                     </Link>
 
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="relative z-110 flex flex-col gap-1.5 cursor-pointer md:hidden"
+                        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                        className="relative z-110 flex flex-col gap-1.5 cursor-pointer md:hidden focus-visible:outline-2 focus-visible:outline-brand-accent"
                     >
                         <span className={`w-8 h-0.5 transition-all ${isMenuOpen ? "bg-brand-white rotate-45 translate-y-2" : "bg-brand-forest"}`}></span>
                         <span className={`w-8 h-0.5 transition-all ${isMenuOpen ? "bg-brand-white opacity-0" : "bg-brand-forest"}`}></span>

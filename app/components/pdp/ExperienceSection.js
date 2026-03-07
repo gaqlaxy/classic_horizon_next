@@ -1,6 +1,6 @@
 export default function ExperienceSection({ description }) {
   return (
-    <div className="experience-section">
+    <div id="overview" className="experience-section scroll-mt-32">
       <h2 className="section-title text-brand-charcoal/30 text-xs font-bold uppercase tracking-[0.5em] mb-8 md:mb-12 flex items-center gap-4">
         <span className="h-px w-8 bg-brand-charcoal/20"></span>
         The Experience
